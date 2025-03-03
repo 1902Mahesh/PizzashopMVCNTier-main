@@ -1,0 +1,32 @@
+@model List<Role>
+@{
+  ViewData["Title"] = "Add User Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content mt-5">
+  <div class="p-5 bg-white f-2 role_table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-11" scope="col">Role</th>
+          <th class="col-1" scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        @foreach (var role in Model)
+        {
+          <tr>
+            <td>@role.Rolename</td>
+            <td>
+              <a asp-action="Permission" asp-controller="RolePermission" asp-route-id="@role.RoleId" class="btn">
+                <img src="~/images/icons/edit-pen.svg" alt="">
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

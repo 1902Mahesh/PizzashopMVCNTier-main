@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace DataLogicLayer.Models;
+
+public partial class Paymentstatus
+{
+    public long Id { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+}

@@ -1,0 +1,35 @@
+@* Partial View: _Pagination.cshtml *@
+ @model DataLogicLayer.ViewModels.PaginationViewModel
+
+ <div class="d-flex flex-sm-row flex-column align-items-center justify-content-end pagination_container">
+     <div class="d-flex flex-row align-items-center">
+         <span>Items per page:</span>
+         <form method="get" asp-action="@Model.ActionName" asp-controller="@Model.ControllerName">
+             <select name="pageSize" class="form-select w-auto" onchange="this.form.submit()">
+                 <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                 <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                 <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
+                 <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+             </select>
+             <input type="hidden" name="pageNo" value="@Model.PageNo" />
+         </form>
+     </div>
+
+     <span style="margin-left: 8px" class="pagination_details">
+         Showing @((Model.PageNo - 1) * Model.PageSize + 1) - @Math.Min(Model.PageNo * Model.PageSize, Model.TotalRecords) of @Model.TotalRecords
+     </span>
+
+     <div>
+         <a asp-action="@Model.ActionName" asp-controller="@Model.ControllerName"
+            asp-route-pageNo="@(Model.PageNo - 1)" asp-route-pageSize="@Model.PageSize"
+            class="btn border border-black @(Model.PageNo == 1 ? "disabled" : "")">
+             <img src="~/images/icons/chevron-left.svg" alt="Previous" />
+         </a>
+
+         <a asp-action="@Model.ActionName" asp-controller="@Model.ControllerName"
+            asp-route-pageNo="@(Model.PageNo + 1)" asp-route-pageSize="@Model.PageSize"
+            class="btn border border-black @(Model.PageNo * Model.PageSize >= Model.TotalRecords ? "disabled" : "")">
+             <img src="~/images/icons/chevron-right.svg" alt="Next" />
+         </a>
+     </div>
+ </div>
