@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        string filePath = "students.csv"; // CSV file path
+        List<Student> students = new List<Student>();
+
+        var lines = File.ReadAllLines(filePath).Skip(1); // Skip header
+
+        students = lines
+            .Select(line => line.Split(','))
+            .Select(data => new Student
+            {
+                RollNumber = int.Parse(data[0]),
+                Name = data[1],
+                MobileNumber = data[2],
+                City = data[3],
+                Address = data[4],
+                Email = data[5],
+                Pincode = data[6]
+            })
+            .Where(s => !string.IsNullOrWhiteSpace(s.Email)) // Remove records without email
+            .Where(s => s.Pincode.Length <= 6) // Remove records with invalid pincode
+            .Select(s => 
+            {
+                if (!s.MobileNumber.StartsWith("+91")) 
+                    s.MobileNumber = "+91" + s.MobileNumber;
+                return s;
+            })
+            .ToList();
+
+        SaveToDatabase(students);
+    }
+
+    static void SaveToDatabase(List<Student> students)
+    {
+        using (var context = new StudentDbContext()) // EF Core DB Context
+        {
+            foreach (var student in students)
+            {
+                var existingStudent = context.Students.FirstOrDefault(s => s.RollNumber == student.RollNumber);
+
+                if (existingStudent != null)
+                {
+                    // Update existing student
+                    existingStudent.Name = student.Name;
+                    existingStudent.MobileNumber = student.MobileNumber;
+                    existingStudent.City = student.City;
+                    existingStudent.Address = student.Address;
+                    existingStudent.Email = student.Email;
+                    existingStudent.Pincode = student.Pincode;
+                }
+                else
+                {
+                    // Add new student
+                    context.Students.Add(student);
+                }
+            }
+            context.SaveChanges();
+        }
+    }
+}
