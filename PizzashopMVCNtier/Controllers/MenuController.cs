@@ -234,6 +234,11 @@ public class MenuController : Controller
     {
         return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
     }
+
+    public async Task<IActionResult> GetAllModifierItems(int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return PartialView("_existingModifierList", await _modifiersService.GetAllModfierItems(pageNo, pageSize, search));
+    }
     #endregion
 
 

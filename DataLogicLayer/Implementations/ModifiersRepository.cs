@@ -52,6 +52,38 @@ public class ModifiersRepository : IModifiersRepository
         return (modifierItems, totalRecords);
     }
 
+    public async Task<(IEnumerable<ModifierItemViewModel> modifierItems, int totalRecords)> GetAllModifierItemAsync(int pageNo, int pageSize, string search)
+    {
+        IQueryable<ModifierItemViewModel> query = _context.Modifieritems
+                                 .Include(m => m.Unit)
+                                 .Where(m =>!m.Isdeleted)
+                                 .Select(m => new ModifierItemViewModel
+                                 {
+                                     ModifierItemId = m.Id,
+                                     Name = m.Name,
+                                     Rate = m.Rate,
+                                     Unit = m.Unit.Name,
+                                     Quantity = m.Quantity,
+                                 });
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            search = search.ToLower();
+            query = query.Where(m => m.Name.ToLower().Contains(search) ||
+                                m.Rate.ToString().Contains(search) ||
+                                m.Quantity.ToString().Contains(search));
+        }
+
+        int totalRecords = await query.CountAsync();
+
+        IEnumerable<ModifierItemViewModel> modifierItems = await query
+                                        .Skip((pageNo - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
+
+        return (modifierItems, totalRecords);
+    }
+
     public async Task<ModifierGroupViewModel> GetModifierItemByIdAsync(long modifierId)
     {
         ModifierGroupViewModel? modifiergroup = await _context.Modifiergroups.Where(m => m.Id == modifierId).
