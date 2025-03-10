@@ -1,0 +1,45 @@
+@model DataLogicLayer.ViewModels.ModifierGroupViewModel
+
+<!-- section for modifier Item -->
+<div class="modifierGroup" style="padding: 16px !important;" data-mgitemid="@Model.ModifierId">
+    <div class="d-flex justify-content-between">
+        <span class="fw-bold fs-5" style="color: rgb(119, 116, 113);">@Model.Name</span>
+        <img data-mgItemId="@Model.ModifierId" src="~/images/icons/delete-trash-icon.svg" alt="" class="removeModifierGroup">
+
+    </div>
+    <!-- Min Max Select  -->
+    <div class="d-flex justify-content-between">
+        <select class="MinAllowed" data-mgitemid="@Model.ModifierId"
+            style="width: 50%; border-radius: 20px; height: 40px; margin-right: 15px; padding-left: 10px;">
+            <option selected value="0">0</option>
+            @for (int i = 1; i <= Model.ModifierItemList.Count; i++)
+            {
+                <option value="@i">@i</option>
+
+            }
+        </select>
+        <select class="MaxAllowed" data-mgitemid="@Model.ModifierId"  style="width: 50%; border-radius: 20px; padding-left: 10px;">
+            <option selected value="0">0</option>
+            @for (int i = 1; i <= Model.ModifierItemList.Count; i++)
+            {
+                <option value="@i">@i</option>
+
+            }
+        </select>
+    </div>
+    <!-- Modifier align-items-center List  -->
+    <div>
+        <ul>
+            @foreach (var items in Model.ModifierItemList)
+            {
+                <li>
+                    <div class="d-flex justify-content-between">
+                        <span>@items.Name</span>
+                        <span>@items.Rate</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+

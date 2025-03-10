@@ -1,0 +1,183 @@
+@model DataLogicLayer.ViewModels.RolePermissionViewModel
+@{
+  ViewData["Title"] = "Add User Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+    <!-- Permissions Starts-->
+        <div class="d-flex flex-row justify-content-between user_list_header">
+          <!-- Permissions User Header -->
+          <div class="user_header fs-2 fs-lg-1">
+            <span>Permissions</span>
+          </div>
+          <!-- Back Button -->
+          <a
+            asp-action="Role" asp-controller="RolePermission"
+            class="btn back_btn d-flex align-items-center justify-content-center"
+          >
+            <img src="./images/icons/chevron-left.svg" alt="" />
+            Back
+          </a>
+        </div>
+
+        <div class="table_container table-responsive">
+          <!-- Input Field to manage user role -->
+
+          <div class="form-floating mb-3 role_selected">
+            <input
+              type="text"
+              class="form-control"
+              id="role"
+              placeholder=""
+              value='@ViewData["RoleName"]'
+              disabled
+            />
+            <label for="role">Role</label>
+          </div>
+
+          <!-- Table Starts -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="selectAll"
+                      onclick="toggleCheckBoxes(this)"
+                    />
+                    <label class="form-check-label" for="exampleCheck1"
+                      >Permisions</label
+                    >
+                  </div>
+                </th>
+                <th scope="col">Can View</th>
+                <th scope="col">Can Add/Edit</th>
+                <th scope="col">Can Dedete</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+
+
+              @foreach (var permmission in Model.Permissions){
+                <tr>
+                  <td>
+                    <div class="mb-3 form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="exampleCheck1"
+                        data-id="@permmission.PermissionId"
+                      />
+                      <label class="form-check-label" for="exampleCheck1"
+                        >@permmission.PermissionName</label
+                      >
+                    </div>
+                  </td>
+                  <!-- View--->
+                  <td>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input view_switch"
+                      data-id="@permmission.PermissionId"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault"
+                      @(permmission.View ? "checked" : "")
+                    />
+                  </div>
+                </td>
+                <!--Add Or Edit--->
+                <td>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input add_switch"
+                      data-id="@permmission.PermissionId"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault"
+                      @(permmission.AddOrEdit ? "checked" : "")
+                      @(!permmission.View ? "disabled" : "")
+                    />
+                  </div>
+                </td>
+                <!--Delete--->
+                <td>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input delete_switch"
+                      data-id="@permmission.PermissionId"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault"
+                      @(permmission.Delete ? "checked" : "")
+                      @(!permmission.AddOrEdit ? "disabled" : "")
+                    />
+                  </div>
+                </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+
+          <!-- Buttons -->
+          <div class="d-flex justify-content-end">
+            <button class="btn create_user_btn me-3" id="save_permissions">Save</button>
+            <a type="button" asp-action="Index" asp-controller="User" class="btn cancle_btn">Cancel</a>
+          </div>
+        </div>
+</div>
+
+
+@section Scripts{
+  <script>
+    $('.view_switch').on("change", function() {
+      var id = $(this).data("id");
+      var view = $(this).prop("checked");
+      $('.add_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.add_switch[data-id="' + id + '"]').prop("disabled", !view);
+      $('.delete_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.delete_switch[data-id="' + id + '"]').prop("disabled", true);
+    })
+
+    // Add btn properties
+    $('.add_switch').on("change", function() {
+      var id = $(this).data("id");
+      var add = $(this).prop("checked");
+      $('.delete_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.delete_switch[data-id="' + id + '"]').prop("disabled", !add);
+    })
+
+    $('#save_permissions').on("click",function() {
+      var roleId = '@Model.RoleId';
+      var permissionList = [];
+
+        $('.view_switch').each(function() {
+          var permissionId = $(this).data("id");
+          permissionList.push({
+            PermissionId : permissionId,
+            View : $(this).prop("checked"),
+            AddOrEdit : $('.add_switch[data-id="' + permissionId + '"]').prop("checked"),
+            Delete : $('.delete_switch[data-id="' + permissionId + '"]').prop("checked")
+          })
+        })
+
+      $.ajax({
+            url: '@Url.Action("Permission", "RolePermission")',
+            type: "POST",
+            data:{roleId : roleId, model:permissionList},
+            success: function (roles) {
+              toastr.success("Permissions Updated Succesfully");
+            },
+            error: function () {
+              toastr.error("Error updating Permissions");
+            }
+        });
+    });
+
+    
+  </script>
+}

@@ -1,0 +1,51 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Unauthorized";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PizzashopMVCProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    
+    <style>
+    .container-fluid{
+        background-color: #d9eef8;
+        height: 100%;
+        padding-top: 40px;
+    }
+    h1 {
+        font-size: 6rem;
+    }
+    .error-code
+    {
+        font-weight: 1000;
+        font-size: 150px;
+    }
+    .text-color{
+        color: #0067a6;
+    }
+</style>
+</head>
+
+<body>
+    
+    <div class="container-fluid text-center">
+    <div class="d-flex justify-content-center mb-5">
+        <img src="~/images/logos/pizzashop_logo.png" alt="Pizzashop Logo" class="mb-3" style="max-width: 80px;">
+        <span class="fs-1 text-color">PIZZASHOP</span>
+    </div>
+    <h1 class="display-1 error-code text-color">Oops!</h1>
+    <h5 class="fw-semibold">An error occurred.</h5>
+    <p class="text-color" >We are working on fixing this issue.</p>
+</div>
+</body>
+
+
+
+ <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>

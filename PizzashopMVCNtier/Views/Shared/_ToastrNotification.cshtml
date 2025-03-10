@@ -1,0 +1,42 @@
+@{
+    var message = TempData["NotificationMessage"] as string;
+    var messageType = TempData["NotificationType"] as string;
+}
+
+
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "2000",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        var message = "@Html.Raw(message)";
+        var messageType = "@Html.Raw(messageType)".toLowerCase();
+        
+        if (message.trim() !== "") {
+            switch (messageType) {
+                case "success":
+                    toastr.success(message);
+                    break;
+                case "error":
+                    toastr.error(message);
+                    break;
+                case "warning":
+                    toastr.warning(message);
+                    break;
+                case "info":
+                    toastr.info(message);
+                    break;
+                default:
+                    toastr.info(message);
+                    break;
+            }
+        }
+    });
+</script>
