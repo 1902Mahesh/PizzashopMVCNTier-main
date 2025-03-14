@@ -1,0 +1,593 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+html,
+body {
+  /* overflow: hidden; */
+  width: 100%;
+}
+
+body {
+  background-color: #f2f2f2 !important;
+  height: 100vh;
+}
+
+/* Color For Logo and Header for Pizza shop */
+.heading_color {
+  color: #0066a7;
+}
+
+.txt-color
+{
+  color: #776d6d;
+}
+
+.main_container {
+  width: 100%;
+}
+
+/* <-------- Login Page CSS ------>*/
+
+/* Pizza Image */
+.domino_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right Section of Login Page*/
+.right_section {
+  background-color: #d8eff8;
+}
+
+/* PizzaShop Logo Image */
+.pizzashop_img {
+  width: 60px;
+  margin: 10px;
+}
+
+.pizzashop_name {
+  font-weight: 600;
+}
+
+/* Login-form :- Placeholder Icon */
+.placeholder_icon {
+  position: absolute;
+  top: 14px;
+  right: 11px;
+}
+
+/* Login Form :- Message Validation messages */
+.validation_msg {
+  color: rgb(243, 40, 40);
+  font-size: 14px;
+}
+
+/* Submit Button */
+
+.submit_btn {
+  background-color: #0066a7 !important;
+  color: #ffffff !important;
+}
+
+/* <---- User List Page  -----> */
+
+/* Side Navigation Bar */
+.sidebar {
+  width: 260px !important;
+  /* height: 100vh; */
+  background-color: #ffffff;
+  padding-left: 12px;
+}
+
+/* Offcanvas Logo Image */
+.sidebar a > img {
+  width: 70px;
+}
+
+.sidebar a {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  padding-left: 0px;
+}
+
+.sidebar ul > li {
+  list-style: none;
+  padding: 12px 0;
+  cursor: pointer;
+}
+
+.sidebar ul > li > a {
+  text-decoration: none;
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+.sidebar ul > li > a > img {
+  margin-right: 10px;
+  width: 20px;
+}
+
+.sidebar ul > li > a > span {
+  color: #6c757d;
+}
+
+.sidebar_desc {
+  /* color: #0066a7; */
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sidebar .active {
+  background-color: #e9eaeb !important;
+}
+
+.active > a > span {
+  color: #0066a7 !important;
+}
+
+/* Navbar Upper CSS */
+
+.upper_navbar {
+  background-color: #0066a7;
+}
+
+.body_content {
+  width: calc(100% - 260px);
+  /* height: 100vh; */
+  background-color: #f2f2f2;
+  padding: 15px 36px 15px;
+}
+
+/* <---- User List css */
+
+.search_icon {
+  position: absolute;
+  top: 6px;
+  right: 21px;
+}
+
+.user_header {
+  color: #0068a9;
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.add_user_btn {
+  background-color: #0066a7 !important;
+  color: #ffffff !important;
+}
+
+/* User List Table Css */
+.table_container {
+  background-color: #f8f9fa;
+  border-radius: 9px;
+  padding: 14px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-top: 12px;
+
+  overflow-x: auto;
+  max-width: 100%;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+/* * Ensure table cells do not break content */
+*/ .table {
+  min-width: 800px; /* Set a minimum width to prevent squeezing */
+}
+
+/* Ensure table headers and cells maintain their width */
+.table th,
+.table td {
+  white-space: nowrap;
+}
+
+.table_container td {
+  color: #6c757d;
+  vertical-align: middle;
+  font-weight: 750;
+}
+
+/* User List User Profile Image */
+.user_profile img {
+  width: 44px;
+  padding-right: 10px;
+}
+
+.status {
+  /* background-color: red; */
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 16px;
+  border-radius: 30px;
+}
+
+.active_status {
+  background-color: #99d363;
+}
+
+.inactive_status {
+  background-color: rgb(207, 48, 48);
+}
+
+.btn {
+  cursor: pointer !important;
+}
+
+/* .user_action {
+  outline: none;
+  padding: 0 !important;
+} */
+
+.user_action img {
+  width: 20px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Pagination CSS */
+.pagination_container span,
+.pagination_container button {
+  margin-right: 8px;
+}
+
+/* <----- Add User Page CSS */
+
+.back_btn {
+  background-color: #f2f2f2 !important;
+  color: #0f6eab !important;
+  border: 1px solid #0f6eab !important;
+  font-size: 20px !important;
+}
+
+.back_btn:hover {
+  background-color: #0066a7 !important;
+  color: #ffffff !important;
+}
+
+.form_container {
+  background-color: #f8f9fa;
+  border-radius: 9px;
+  padding: 14px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-top: 12px;
+}
+
+.btn:focus {
+  border: none;
+  box-shadow: none !important;
+}
+
+/* Outline Focus css */
+.form-control:focus,
+.form-select:focus {
+  border: none;
+  box-shadow: none !important;
+}
+
+/* Floating Element */
+.form-floating > label {
+  left: 15px !important;
+}
+
+.form-floating > .form-control:focus ~ label {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-1.9rem) translateX(0.15rem) !important;
+}
+
+/* Browse File Button */
+
+.browse_file {
+  height: 66px;
+  width: 100%;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.browse_file_label {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px dashed #999;
+}
+
+/* Form Buttons */
+.create_user_btn {
+  background-color: #0066a7 !important;
+  color: #ffffff !important;
+}
+
+.cancle_btn {
+  color: #0066a7 !important;
+  border: 1px solid #0066a7 !important;
+}
+
+/* <--- Permissions Page CSS ---> */
+.role_selected {
+  width: 50%;
+}
+
+/* <----- Menu Page CSS -----> */
+
+/* Menu Page CSS */
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: black !important;
+  background-color: #ffffff !important;
+  border-radius: 0 !important;
+  border: none;
+  border-bottom: 2px solid #0066a7 !important;
+}
+.nav-link {
+  color: black !important;
+}
+
+.tab_btn:hover{
+  border: none !important;
+}
+/* Category Scroll Bar */
+.category_part {
+  background-color: #f6f6f6;
+  width: 300px;
+}
+
+.category_list {
+  height: 335px;
+  overflow-y: scroll;
+  font-size: 16px;
+}
+
+.category_list ul li {
+  list-style: none;
+  cursor: pointer;
+}
+
+.item-grid {
+  transform: rotate(90deg);
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.category_active, .modifier_active {
+  color: #0066a7;
+  text-decoration: none;
+}
+
+
+
+/* Items And Modifiers Modal */
+.itemModifierModal
+{
+  background-color: #fdf5e6;
+   border-radius: 10px; 
+   padding-top: 10px;
+   overflow-y: scroll;
+   max-height: 470px;
+}
+
+.addItemCheckBox{
+  transform: scale(2);
+  margin-right: 12px;
+}
+
+/* Edit Delete Button in Menu */
+.editDeleteBtn{
+  visibility: hidden;
+}
+
+/* Profile Data CSS part */
+#profileImageContainer {
+  top: -20px;
+  left: 23px;
+}
+
+#cameraImageContainer {
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
+  top: 56px;
+  left: -4px;
+}
+
+/* Toaster CSS */
+/* Custom Toastr Styles */
+.toast-success {
+  background-color: #28a745 !important; /* Green for success */
+  color: white !important;
+}
+
+.toast-error {
+  background-color: #dc3545 !important; /* Red for errors */
+  color: white !important;
+}
+
+.toast-info {
+  background-color: #17a2b8 !important; /* Blue for info */
+  color: white !important;
+}
+
+.toast-warning {
+  background-color: #ffc107 !important; /* Yellow for warning */
+  color: black !important;
+}
+
+.toast-message {
+  margin-left: 34px;
+}
+
+.toast-title {
+  display: none !important;
+}
+
+/* Customize the Toastr position */
+#toast-container > div {
+  border-radius: 8px !important;
+  padding: 15px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+
+/* Hide the default browser password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+
+
+/* Roles and Permissions Table */
+.role_table{
+  max-width: 1300px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.role_table table{
+  color: rgb(110, 107, 107);
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+
+/* Tables and Sections CSS */
+.table_status{
+  max-width: 122px;
+  border-radius: 20px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 15px;
+}
+
+.occupied_status{
+  background-color: #6c757d;
+}
+
+.available_status{
+  background-color: #44cf72;
+}
+
+.center-text{
+  text-align: center;
+}
+
+ 
+
+/* Media Query */
+
+@media (max-width: 767px) {
+  .pizzashop_name {
+    font-size: 25px;
+  }
+
+  .pizza_icon {
+    min-width: auto;
+  }
+
+  .role_selected {
+    width: 100% !important;
+  }
+}
+
+@media (max-width:1200px) {
+  .addItemCheckBox{
+    margin: 0;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 991px) {
+  .right_section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .right_section:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url(../images/dominos_background.jpg);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+  }
+
+  .right_section_login {
+    backdrop-filter: blur(10px);
+  }
+
+  .items_header_buttons {
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .body_content {
+    width: 100%;
+  }
+
+  .category_list {
+    height: 150px;
+  }
+
+  .category_part {
+    width: 100%;
+  }
+}
+
+@media (max-width: 567px) {
+  .pizzashop_name {
+    font-size: 20px;
+  }
+
+  .welcome_slogan {
+    font-size: 1.2rem;
+  }
+  .search-user
+  {
+    margin: 0 !important;
+    margin-bottom: 5px !important;
+  }
+  
+}
+
+@media (max-width: 390px) {
+
+  .image_div{
+    display: flex;
+    flex-direction: column;
+  }
+  #profileImageContainer
+  {
+    width: fit-content;
+  }
+
+  #cameraImageContainer
+  {
+    top: -59px;
+    left: 113px;
+  }
+}

@@ -1,0 +1,118 @@
+@model DataLogicLayer.ViewModels.UserViewModel
+
+<div class="table-responsive" >
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+                <button class="btn p-0 sort-btn" data-name="name" data-order="asc">
+                    <img src="~/images/icons/arrow-up.svg" alt="" width="20px"  />
+                </button>
+                <button class="btn p-0 sort-btn" data-name="name" data-order="desc">
+                    <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
+                </button>
+            </th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">
+                Role
+                <button class="btn p-0 sort-btn" data-order="asc"  data-name="role">
+                    <img src="~/images/icons/arrow-up.svg" alt="" width="20px" />
+                </button>
+                <button class="btn p-0 sort-btn" data-name="role" data-order="desc">
+                    <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
+                </button>
+            </th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody id="userListBody">
+        @foreach (var user in Model.UserList)
+        {
+            <tr>
+                <td>
+                    <img src="@(string.IsNullOrEmpty(user.ImgUrl as string) ? "/uploads/Default_pfp.svg.png" : user.ImgUrl)"
+                            class="rounded-circle" width="25px" height="25px">
+                    @user.FirstName @user.LastName
+                </td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@user.RoleName</td>
+                <td>
+                   @if(user.Status)
+                        {
+                            <div class="status active_status">Active</div>
+                        }
+                        else
+                        {
+                            <div class="status inactive_status">Inactive</div>
+                        }
+                </td>
+                <td>
+                    <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("EditUser", "User")?id=@user.UserId">
+                        <img src="/images/icons/edit-pen.svg" alt="" />
+                    </a>
+                    @if(User.IsInRole("SuperAdmin"))
+                    {
+                        <a class="btn user_action user_action_delete deleteUserBtn @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn user_action user_action_delete deleteUserBtn disabled-link @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<!-- Paggination Frontend Start -->
+<div class="d-flex flex-sm-row flex-column align-items-sm-center justify-content-end pagination_container">
+    <div class="d-flex flex-row align-items-center">
+        <span>Items per page:</span>
+
+        <!-- Page  Numbers Drop Down -->
+        <select class="form-select w-auto" onchange="paginationAjax(1)" aria-label="Default select example" id="selectPageSize">
+            @if (Model.Page.PageSize != null)
+            {
+                <option value="3" selected="@(Model.Page.PageSize == 3 ? true : false)">3</option>
+                <option value="5" selected="@(Model.Page.PageSize == 5 ? true : false)">5</option>
+                <option value="10" selected="@(Model.Page.PageSize == 10 ? true : false)">10</option>
+                <option value="15" selected="@(Model.Page.PageSize == 15 ? true : false)">15</option>
+            }
+        </select>
+    </div>
+
+    <span style="margin-left: 8px" class="pagination_details">
+        Showing @Model.Page.FromRec - @Model.Page.ToRec of @Model.Page.TotalRecords
+
+    </span>
+
+    @if (Model.Page.TotalPages >= 1)
+    {
+        <div>
+            <!-- Previous Page button-->
+
+            <button type="button" class="btn border border-black prev_page" id="prevPageIcon" @(Model.Page.CurrentPage > 1 ?
+                " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage-1)">
+                <img src="~/images/icons/chevron-left.svg" alt="" />
+            </button>
+
+            <!-- Next Page button-->
+            <button type="button" class="btn border border-black" id="nextPageIcon" @(Model.Page.CurrentPage <
+                Model.Page.TotalPages ? " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage+1)">
+            <img src="~/images/icons/chevron-right.svg" alt="" />
+        </button>
+    </div>
+        }
+</div>
+<!-- Pagination Frontend Ends -->

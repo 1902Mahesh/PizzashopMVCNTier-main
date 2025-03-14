@@ -1,0 +1,101 @@
+@model DataLogicLayer.ViewModels.ItemListViewModel
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th id="itemName" scope="col">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="itemSuperCheckbox"  />
+                    <label class="form-check-label" for="selectAll">Name</label>
+                </div>
+            </th>
+            <th scope="col">Item Type</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Available</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody id="itemListBody">
+        @foreach (var items in Model.ItemList)
+        {
+            <tr>
+                <td>
+                    <div class='d-flex'>
+                        <div class="form-check">
+                            <input class="form-check-input itemCheckBox" type="checkbox" id="flexCheckDefault" data-id="@items.ItemId">
+                        </div>
+                        <img src="@(string.IsNullOrEmpty(items.ItemImg as string) ? "/uploads/Default_pfp.svg.png" : items.ItemImg)"
+                            class="rounded-circle me-2" width="25px" height="25px">
+                        @items.ItemName
+                    </div>
+                </td>
+                <td>
+                    <img src="@(string.IsNullOrEmpty(items.ItemType as string) ? "/uploads/Default_pfp.svg.png" : items.ItemType)" class="rounded-circle"
+                        width="25px" height="25px">
+                </td>
+                <td>@items.Rate</td>
+                <td>@items.Quantity</td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input view_switch" data-id="${item.itemId}" type="checkbox" role="switch"
+                            id="flexSwitchCheckDefault" @(items.IsAvailable ? "checked" : "") disabled />
+                    </div>
+                </td>
+                <td>
+                    <a class="btn user_action editItemBtn" data-id="@items.ItemId" data-bs-toggle="modal"
+              data-bs-target="#addItemModal">
+                        <img src="/images/icons/edit-pen.svg" alt=""/>
+                    </a>
+                    <a class="btn user_action user_action_delete deleteItemBtn" data-id="@items.ItemId"
+                        data-bs-toggle="modal" data-bs-target="#deleteItemModal">
+                        <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<!-- Paggination Frontend Start -->
+<div class="d-flex flex-sm-row flex-column align-items-sm-center justify-content-end pagination_container">
+    <div class="d-flex flex-row align-items-center">
+        <span>Items per page:</span>
+
+        <!-- Page  Numbers Drop Down -->
+        <select class="form-select w-auto" onchange="paginationAjax(@Model.Page.CurrentPage)" aria-label="Default select example" id="selectPageSize">
+            @if (Model.Page.PageSize != null)
+            {
+                <option value="3" selected="@(Model.Page.PageSize == 3 ? true : false)">3</option>
+                <option value="5" selected="@(Model.Page.PageSize == 5 ? true : false)">5</option>
+                <option value="10" selected="@(Model.Page.PageSize == 10 ? true : false)">10</option>
+                <option value="15" selected="@(Model.Page.PageSize == 15 ? true : false)">15</option>
+            }
+        </select>
+    </div>
+
+    <span style="margin-left: 8px" class="pagination_details">
+        Showing @Model.Page.FromRec - @Model.Page.ToRec of @Model.Page.TotalRecords
+
+    </span>
+
+    @if (Model.Page.TotalPages >= 1)
+    {
+        <div>
+            <!-- Previous Page button-->
+
+            <button type="button" class="btn border border-black prev_page" id="prevPageIcon" @(Model.Page.CurrentPage > 1 ?
+                " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage-1)">
+                <img src="~/images/icons/chevron-left.svg" alt="" />
+            </button>
+
+            <!-- Next Page button-->
+            <button type="button" class="btn border border-black" id="nextPageIcon" @(Model.Page.CurrentPage <
+                Model.Page.TotalPages ? " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage+1)">
+            <img src="~/images/icons/chevron-right.svg" alt="" />
+        </button>
+    </div>
+        }
+</div>
+<!-- Pagination Frontend Ends -->

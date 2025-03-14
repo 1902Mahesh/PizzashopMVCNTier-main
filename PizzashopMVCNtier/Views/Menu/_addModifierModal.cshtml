@@ -1,0 +1,66 @@
+@model DataLogicLayer.ViewModels.AddEditModifierViewModel
+<div class="modal-header border-0">
+    <h5 class="modal-title fw-bolder txt-color">
+         @(Model.ModifierItemId == 0 ? "Add New " : "Edit ") Modifier
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form id="modifierItemForm" asp-action="SaveModifier" asp-controller="Menu">
+    <input type="hidden" asp-for="@Model.ModifierItemId">
+    <input type="hidden" asp-for="@Model.OldModifierGroupId">
+    <div class="modal-body text-center">
+        <!-- row 1-->
+        <div class="row mb-3">
+            <div class="form-floating mb-3 col-md-6">
+                <select asp-for="@Model.ModifierGroupId" class="form-select" id="modifierSelect">
+                        <option value="-2">Select Modifier Group(s)</option>
+                        @foreach (var modifierGroup in Model.ModifierGroupList)
+                        {
+                            <option value="@modifierGroup.ModifierId">@modifierGroup.Name</option>
+                        }
+                    </select>
+            </div>
+            <div class="form-floating col-md-6">
+                <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Enter name" required>
+                <label class="form-label txt-color">Name*</label>
+            </div>
+        </div>
+
+        <!-- Row 2-->
+        <div class="row mb-3">
+
+            <div class="form-floating col-md-4 mb-3">
+                <input asp-for="@Model.Rate" type="number" class="form-control" required>
+                <label class="form-label">Rate*</label>
+            </div>
+
+            <div class="form-floating col-md-4 mb-3">
+                <input asp-for="@Model.Quantity" type="number" class="form-control">
+                <label class="form-label">Quantity*</label>
+            </div>
+
+            <!-- Unit Selection -->
+            <div class="form-floating col-md-4 mb-3">
+                <select asp-for="@Model.UnitId" class="form-select">
+                    <option value="-2">Select a Unit</option>
+                    @foreach (var unit in Model.UnitList)
+                    {
+                        <option value="@unit.UnitId">@unit.Name</option>
+                    }
+                </select>
+                <label class="form-label">Unit*</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-3">
+                <textarea asp-for="@Model.Description" class="form-control" rows="4" placeholder="Description"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer border-0 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary addEditModifierBtn" id="confirmModifierBtn">Save</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+    </div>
+</form>

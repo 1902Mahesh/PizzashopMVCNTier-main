@@ -1,0 +1,254 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName") ?? "Guest";
+    var profileImage = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
+    var user = HttpContextAccessor.HttpContext.User;
+    var permissions = user.Claims.Where(c => c.Type == "permission").Select(c => c.Value).ToList();
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PizzashopMVCProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+    <!-- Navbar Upper Starts -->
+    <nav class="navbar navbar-expand-lg upper_navbar p-0">
+        <div class="container-fluid p-0">
+            <div class="bg-white d-flex flex-row">
+                <!-- Hamburger -->
+                <button class="btn d-block d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                    aria-controls="offcanvasExample">
+                    <img src="~/images/icons/hamburger.svg" alt="" width="30px" />
+                </button>
+
+                <!-- Pizzashop Logo -->
+                <a href="" class="d-flex align-items-center text-decoration-none ms-3">
+                    <img src="~/images/logos/pizzashop_logo.png" alt="" width="70px" style="margin-right: 13px" />
+                    <span class="sidebar_desc d-none d-md-block fw-bold" style="padding-right: 60px">PIZZASHOP</span>
+                </a>
+            </div>
+            <!-- User Profile Image -->
+            <div class="dropdown">
+                <img 
+                @* src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
+                src="@profileImage"
+                 class="rounded-circle me-3" height="50px" width="50px"
+                class="me-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="border-bottom"><a class="dropdown-item">
+                            @* <img src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
+                            <img src="@profileImage"
+                             alt="" width="40px" height="40px" class="rounded-circle">
+                            <span class="ms-2">@userName</span>
+                        </a></li>
+                    <li class="mt-2"><a class="dropdown-item" asp-action="ProfileDetails" asp-controller="Dashboard">
+                            <img src="~/images/icons/person-circle.svg" alt="" width="20px">
+                            <span class="ms-3">My Profile</span>
+                        </a></li>
+                    <li><a class="dropdown-item" asp-action="ChangePassword" asp-controller="Dashboard">
+                            <img src="~/images/icons/reset-svgrepo-com.svg" alt="" width="20px">
+                            <span class="ms-3">Change Password</span>
+                        </a></li>
+                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <img src="~/images/icons/logout-svgrepo-com.svg" alt="" width="20px">
+                            <span class="ms-3">Logout</span>
+                        </a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <!-- Navbar Upper Ends -->
+
+    <div class="main_body d-flex" style="min-height: 92vh;">
+        <!-- Left Navigation Panel Starts-->
+        <nav class="d-none d-lg-block sidebar d-flex flex-column align-items-center">
+            <ul>
+                <li class="@((ViewData["ActiveLink"] as string) == "Dashboard" ? "active" : "")">
+                    <a asp-action="Index" asp-controller="Dashboard">
+                        <img src="~/images/icons/border-all.svg" alt="" />
+                        <span class="sidebar_desc">Dashboard</span>
+                    </a>
+                </li>
+                <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
+                    <a asp-action="Index" asp-controller="User">
+                        <img src="~/images/icons/people.svg" alt="" />
+                        <span class="sidebar_desc">Users</span>
+                    </a>
+                </li>
+                @* @if (User.IsInRole("SuperAdmin"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                        <a asp-action="Role" asp-controller="RolePermission">
+                            <img src="~/images/icons/person-gear.svg" alt="" />
+                            <span class="sidebar_desc">Roles and Permisions</span>
+                        </a>
+                    </li>
+                } *@
+                @if(permissions.Contains("RoleAndPermission_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                        <a asp-action="Role" asp-controller="RolePermission">
+                            <img src="~/images/icons/person-gear.svg" alt="" />
+                            <span class="sidebar_desc">Roles and Permisions</span>
+                        </a>
+                    </li>
+                }
+
+                <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
+                    <a asp-action="Index" asp-controller="Menu">
+                        <img src="~/images/icons/menu-icon.png" alt="" />
+                        <span class="sidebar_desc">Menu</span>
+                    </a>
+                </li>
+                <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
+                    <a asp-action="Index" asp-controller="TableAndSection">
+                        <img src="~/images/icons/square-fill.svg" alt="" />
+                        <span class="sidebar_desc">Table and Section</span>
+                    </a>
+                </li>
+                <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
+                    <a href="">
+                        <img src="~/images/icons/cash-coin.svg" alt="" />
+                        <span class="sidebar_desc">Taxes and Fees</span>
+                    </a>
+                </li>
+                <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
+                    <a href="">
+                        <img src="~/images/icons/clipboard-check.svg" alt="" />
+                        <span class="sidebar_desc">Order</span>
+                    </a>
+                </li>
+                <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
+                    <a href="">
+                        <img src="~/images/icons/person-rolodex.svg" alt="" />
+                        <span class="sidebar_desc">Customers</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Left Navigation Panel Ends -->
+
+        <!-- OffCanvas SideBar Starts -->
+        <div class="offcanvas offcanvas-start w-auto" tabindex="-1" id="offcanvasExample"
+            aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-body">
+                <nav class="sidebar d-flex flex-column">
+                    <div class="offcanvas-header p-0">
+                        <a href="" class="d-flex align-items-center text-decoration-none ms-3">
+                            <img src="~/images/logos/pizzashop_logo.png" alt="" />
+                            <span class="sidebar_desc fw-bold">PIZZASHOP</span>
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <ul>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Dashboard" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="Dashboard">
+                                <img src="~/images/icons/border-all.svg" alt="" />
+                                <span class="sidebar_desc">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="User">
+                                <img src="~/images/icons/people.svg" alt="" />
+                                <span class="sidebar_desc">Users</span>
+                            </a>
+                        </li>
+                        @if(permissions.Contains("RoleAndPermission_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                                <a asp-action="Role" asp-controller="RolePermission">
+                                    <img src="~/images/icons/person-gear.svg" alt="" />
+                                    <span class="sidebar_desc">Roles and Permisions</span>
+                                </a>
+                            </li>
+                        }
+                        <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="Menu">
+                                <img src="~/images/icons/customer.svg" alt="" />
+                                <span class="sidebar_desc">Menu</span>
+                            </a>
+                        </li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="TableAndSection">
+                                <img src="~/images/icons/square-fill.svg" alt="" />
+                                <span class="sidebar_desc">Table and Section</span>
+                            </a>
+                        </li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Taxes" ? "active" : "")">
+                            <a href="">
+                                <img src="~/images/icons/cash-coin.svg" alt="" />
+                                <span class="sidebar_desc">Taxes and Fees</span>
+                            </a>
+                        </li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
+                            <a href="">
+                                <img src="~/images/icons/clipboard-check.svg" alt="" />
+                                <span class="sidebar_desc">Order</span>
+                            </a>
+                        </li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
+                            <a href="">
+                                <img src="~/images/icons/person-rolodex.svg" alt="" />
+                                <span class="sidebar_desc">Customers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- Offcanvas Sidebar Ends -->
+
+
+        <!-- Delete user Modal -->
+        <div class="modal fade" tabindex="-1" id="logoutModal" aria-labelleby="modal-title" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0 pb-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column align-items-center p-0">
+                        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" class="my-4 " />
+                        <p class="fs-5 fw-bold m-0">
+                            Are you sure you want to Logout?
+                        </p>
+                    </div>
+                    <div class="modal-footer border-0 d-flex flex-row justify-content-center">
+                        @* <button type="submit" asp-action="Logout"asp-controller="Home" class="btn btn-primary" style="width: 70px;">Yes</button> *@
+                        <a asp-action="Logout" asp-controller="Home" role="button" class="btn btn-primary"
+                            style="width: 70px;">Yes</a>
+                        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/js/custom.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Toastr Notification Partial -->
+    @await Html.PartialAsync("_ToastrNotification")
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

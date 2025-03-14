@@ -1,0 +1,69 @@
+@model IEnumerable<DataLogicLayer.ViewModels.ModifierGroupViewModel>
+
+<div class="container-fluid d-flex flex-column flex-lg-row p-0">
+    <div class="fs-5 category_part">
+        <!-- Tab Content Part 2 -->
+        <div class="d-flex justify-content-between mb-4">
+            <h4 class="heading_color fw-bold">Modifier Group </h4>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#modifierModal" id="modifierGroupAddModalBtn">
+                <img src="~/images/icons/plus-square.svg" alt="" width="30px" />
+            </button>
+        </div>
+
+        <!-- Modifier List Starts -->
+        <div class="category_list">
+            <ul class="p-0" id="modifier_listUl">
+                @foreach (var modifierGroup in Model)
+                {
+                    <li class="mg-list-items pb-3 d-flex align-items-center justify-content-between">
+                        <div>
+                            <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
+                            <a data-mgid="@modifierGroup.ModifierId">@modifierGroup.Name</a>
+                        </div>
+                        <div class="editDeleteBtn d-flex">
+                            <button class="btn user_action p-0 me-1 editModifierGroupBtn" id="editButton" data-mgid="@modifierGroup.ModifierId"
+                                data-bs-toggle="modal" data-bs-target="#modifierModal">
+                                <img src="/images/icons/edit-pen.svg" alt="" />
+                            </button>
+                            <button class="btn user_action user_action_delete deleteModifierGroupBtn p-0 me-1" id="confirmDeleteModifier"
+                                data-mgid="@modifierGroup.ModifierId" data-bs-toggle="modal" data-bs-target="#deleteModifierGroupModal">
+                                <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                            </button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modifiers Section -->
+    <div class="w-100 table-responsive">
+        <p class="heading_color fs-4 fw-bold ms-2">Modifiers</p>
+        <div class="items_header_buttons d-flex justify-content-end me-3">
+            <div class="d-flex flex-row">
+                <form class="d-flex position-relative" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" id="modifierSearch"
+                        aria-label="Search" />
+                    <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                            alt="" /></label>
+                </form>
+                <button class="btn border border-black me-2">
+                    <img src="~/images/icons/delete-trash-icon.svg" alt="" />
+                </button>
+            </div>
+            <button type="button" id="newModifierBtn" class="btn add_user_btn" data-bs-target="#addModifierItem" data-bs-toggle="modal">
+                <a  class="text-white text-decoration-none">New Modifier</a>
+            </button>
+        </div>
+
+
+        <!-- Table For Modifier Items Data -->
+        <div id="modifierTableContent">
+            
+        </div>
+
+    </div>
+</div>
+
+
+

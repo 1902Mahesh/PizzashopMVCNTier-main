@@ -1,0 +1,189 @@
+@model DataLogicLayer.ViewModels.AdditemViewModel
+<div class="modal-header border-0">
+    <h5 class="modal-title fs-4 fw-bold txt-color"> @(Model.ItemId == 0 ? "Add New " : "Edit ")Menu Item</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form id="menuItemForm" asp-action="SaveItem" asp-controller="Menu" enctype="multipart/form-data">
+    <div class="modal-body">
+        <input type="hidden" asp-for="@Model.ItemId" id="ModalAddItemID">
+        <input type="hidden" id="modifierList" name="modifierItemList">
+        <div class="row gy-10">
+            <div class="row col-lg-8 col-12">
+
+                <!-- Category & Name -->
+                <div class=" form-floating col-lg-6 col-12 mb-3">
+                    <select asp-for="@Model.CategoryId" class="form-select" id="categorySelect">
+                        <option value="">select active Category</option>
+                        @foreach (var category in Model.CategoryList)
+                        {
+                            <option value="@category.Id">@category.CategoryName</option>
+                        }
+                    </select>
+                    <label class="form-label">Category*</label>
+                </div>
+                <div class="form-floating col-lg-6 col-12 mb-3">
+                    <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Enter name" required>
+                    <label class="form-label txt-color">Name*</label>
+                </div>
+
+                <!-- Item Type & Rate -->
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <select asp-for="@Model.ItemTypeId" class="form-select" id="categorySelect">
+                        <option value="">Select a Type</option>
+                        @foreach (var itemType in Model.ItemTypeList)
+                        {
+                            <option value="@itemType.Id">@itemType.Name</option>
+                        }
+                    </select>
+                    <label class="form-label">Item Type*</label>
+                </div>
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <input asp-for="@Model.Rate" type="number" class="form-control" required>
+                    <label class="form-label">Rate*</label>
+                </div>
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <input asp-for="@Model.Quantity" type="number" class="form-control">
+                    <label class="form-label">Quantity*</label>
+                </div>
+
+                <!-- Unit Selection -->
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <select asp-for="@Model.UnitId" class="form-select" id="categorySelect">
+                        <option value="">Select a Unit</option>
+                        @foreach (var unit in Model.UnitList)
+                        {
+                            <option value="@unit.UnitId">@unit.Name</option>
+                        }
+                    </select>
+                    <label class="form-label">Unit*</label>
+                </div>
+
+                <!-- Toggle Switches -->
+                <div class="col-xl-3 col-lg-6 col-6 d-flex align-items-center justify-content-center mb-3">
+                    <div class="form-check form-switch addItemCheckBox">
+                        <input asp-for="@Model.IsAvailable" class="form-check-input" type="checkbox">
+                    </div>
+                    <label class="form-label txt-color me-2">Available</label>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-6 d-flex align-items-center justify-content-center mb-3">
+                    <div class="form-check form-switch addItemCheckBox">
+                        <input asp-for="@Model.DefaultTax" class="form-check-input" type="checkbox">
+                    </div>
+                    <label class="form-label txt-color me-2">Default Tax</label>
+                </div>
+
+                <!-- Tax Percentage & Short Code -->
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <input asp-for="@Model.TaxPercentage" type="number" class="form-control">
+                    <label class="form-label">Tax Percentage</label>
+                </div>
+                <div class="form-floating col-xl-3 col-lg-6 mb-3">
+                    <input asp-for="@Model.ShortCode" type="text" class="form-control">
+                    <label class="form-label">Short Code</label>
+                </div>
+
+                <!-- Description -->
+                <div class="col-12 mb-3">
+                    <textarea asp-for="@Model.Description" class="form-control" rows="4"
+                        placeholder="Description"></textarea>
+                </div>
+
+                <!-- Upload Image -->
+                <div class="col-12">
+                    <label class="form-label">Upload Image</label>
+                    <div class="p-3 text-center" style="border-radius: 10px; border :1px grey dashed; height: 90px;">
+                        <input asp-for="@Model.ItemImage" type="file" class="form-control" style="display: none;"
+                            id="uploadFile">
+                        <label for="uploadFile" class="d-block">
+                            <img src="~/images/icons/cloud-arrow-up.svg" alt="" width="20px">
+                            Drag and Drop or Browse files</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Modifier Groups -->
+            <div class="col-lg-4 col-12 border itemModifierModal" id="mgItemList">
+                <!-- Modifiers Group List -->
+                <div class="modifier-group-list">
+                    <select class="form-select" id="selectModifiers">
+                        <option value="-2">Select Modfifer Group(s)</option>
+                        @foreach (var modifierGroup in Model.ModifierGropList)
+                        {
+                            <option value="@modifierGroup.ModifierId">@modifierGroup.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- section for modifier Item -->
+                @foreach(var modifier in Model.ItemModifierList)
+                {
+                    <!-- section for modifier Item -->
+                <div class="modifierGroup" style="padding: 16px !important;" data-mgitemid="@modifier.ModifierGroupId">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold fs-5" style="color: rgb(119, 116, 113);">@modifier.Name</span>
+                        <img data-mgitemid="@modifier.ModifierGroupId" src="~/images/icons/delete-trash-icon.svg" alt="" class="removeModifierGroup">
+
+                    </div>
+                    <!-- Min Max Select  -->
+                    <div class="d-flex justify-content-between">
+                            <select class="MinAllowed" data-mgitemid="@modifier.ModifierGroupId"
+                                style="width: 50%; border-radius: 20px; height: 40px; margin-right: 15px; padding-left: 10px;">
+                                <option selected value="@modifier.MinAllowed">@modifier.MinAllowed</option>
+                                @for (int i = 1; i <= modifier.ModifierItemList.Count; i++)
+                                {
+                                    <option value="@i">@i</option>
+
+                                }
+                            </select>
+                            <select class="MaxAllowed" data-mgitemid="@modifier.ModifierGroupId"  style="width: 50%; border-radius: 20px; padding-left: 10px;">
+                                <option selected value="@modifier.MaxAllowed">@modifier.MaxAllowed</option>
+                                @for (int i = 1; i <= modifier.ModifierItemList.Count; i++)
+                                {
+                                    <option value="@i">@i</option>
+
+                                }
+                            </select>
+                        </div>
+                        <!-- Modifier align-items-center List  -->
+                        <div>
+                            <ul>
+                                @foreach (var items in modifier.ModifierItemList)
+                                {
+                                    <li>
+                                        <div class="d-flex justify-content-between">
+                                            <span>@items.Name</span>
+                                            <span>@items.Rate</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer border-0">
+        <button type="button" id="submitAddItemForm" class="btn btn-primary">Save</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+
+
+    <script>
+        var selectedModifiersItem = [];
+        function SubmitAddItem() {
+            $(".modifierGroup").each(function () {
+                var id = $(this).data("mgitemid");
+                selectedModifiersItem.push({
+                    ModifierGroupId: id,
+                    MinAllowed: Number($('.MinAllowed[data-mgitemid="' + id + '"]').val()),
+                    MaxAllowed: Number($('.MaxAllowed[data-mgitemid="' + id + '"]').val()),
+                })
+            })
+            $("#modifierList").val(JSON.stringify(selectedModifiersItem));
+        }
+    </script>

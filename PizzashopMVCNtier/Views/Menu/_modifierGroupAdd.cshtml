@@ -1,0 +1,37 @@
+@model DataLogicLayer.ViewModels.ModifierGroupViewModel
+<div class="modal-header border-0">
+    <h5 class="modal-title fw-bolder">Add Modifier Group</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form asp-action="SaveModifierGroup" asp-controller="Menu" id="submitModifierGroupForm">
+    <div class="modal-body d-flex flex-column align-items-center w-100">
+        <input type="hidden" asp-for="@Model.ModifierId">
+        <input type="hidden" id="existingItemList" name="ModifierItemList">
+        <div class="mb-3 w-100">
+            <input type="text" class="form-control" asp-for="@Model.Name" placeholder="Name">
+        </div>
+        <div class="mb-3 w-100">
+            <textarea asp-for="@Model.Description" type="text" class="form-control"
+                placeholder="Description"></textarea>
+        </div>
+    </div>
+    <div>
+        <a class="btn text-primary existingModifierBtn" data-bs-target="#existingModifierModal" data-bs-toggle="modal">+
+            Add Existing Modifiers</a>
+    </div>
+    <div class="ps-3 pt-2 existingModifierList" >
+        @foreach(var item in @Model.ModifierItemList)
+        {
+            <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="@item.ModifierItemId" style="border: 1px solid grey; border-radius: 15px;">
+                @item.Name
+                <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="@item.ModifierItemId"></button>
+            </span>
+        }
+    </div>
+    <div class="modal-footer border-0 d-flex flex-row justify-content-end">
+        <button type="submit" id="submitMgBtn" class="btn btn-primary">Save</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+            Cancel
+        </button>
+    </div>
+</form>

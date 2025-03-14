@@ -1,0 +1,981 @@
+@model DataLogicLayer.ViewModels.MenuViewModel
+@{
+  ViewData["Title"] = "Menu Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+  <!-- Header Menu -->
+  <div class="d-flex flex-row justify-content-between user_list_header">
+    <!-- Menu Header -->
+    <div class="user_header fs-2 fs-lg-1">
+      <span>Menu</span>
+    </div>
+  </div>
+
+  <!-- Tabs for Items and Modifiers -->
+  <ul class="nav nav-tabs bg-white mb-3" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active ms-3 fs-5 tab_btn" id="home-tab" data-bs-toggle="tab"
+        data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+        <img src="~/images/icons/list-check.svg" alt="" class="pe-2" width="30px" />Items
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link ms-3 fs-5 tab_btn" id="profile-tab" data-bs-toggle="tab"
+        data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane"
+        aria-selected="false">
+        <img src="~/images/icons/ui-checks-grid.svg" alt="" class="pe-2" width="25px" />Modifiers
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content bg-white" id="pills-tabContent">
+    <div class="tab-pane fade show active p-0" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+      tabindex="0">
+      <div class="container-fluid d-flex flex-column flex-lg-row p-0">
+        <div class="fs-5 category_part">
+          <!-- Tab Content Part 1 -->
+          <div class="d-flex justify-content-between mb-4">
+            <h3 class="heading_color fw-bold">Category</h3>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#categoryModal">
+              <img src="~/images/icons/plus-square.svg" alt="" width="30px" />
+            </button>
+          </div>
+
+          <!-- Category List Starts -->
+          <div class="category_list">
+            <ul class="p-0" id="category_listUl">
+              @foreach (var category in Model.CategoryList)
+              {
+                <li class="list-items pb-3 d-flex align-items-center justify-content-between">
+                  <div>
+                    <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
+                    <a data-id="@category.Id">@category.CategoryName</a>
+                  </div>
+                  <div class="editDeleteBtn d-flex">
+                    <button class="btn user_action p-0 me-1 editCategoryBtn" id="editButton" data-id="@category.Id"
+                      data-bs-toggle="modal" data-bs-target="#categoryModal">
+                      <img src="/images/icons/edit-pen.svg" alt="" />
+                    </button>
+                    <button class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn"
+                      data-id="@category.Id" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
+                      <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                    </button>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <!-- Items Section -->
+        <div class="w-100 table-responsive">
+          <p class="heading_color fs-4 fw-bold ms-2">Items</p>
+          <div class="items_header_buttons d-flex justify-content-end me-3">
+            <div class="d-flex flex-row">
+              <form class="d-flex position-relative" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" id="search" aria-label="Search" />
+                <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                    alt="" /></label>
+              </form>
+              <button class="btn border border-black me-2" id="MassdeleteItemBtn" data-bs-toggle="modal"
+                data-bs-target="#massDeleteItemModal">
+                <img src="~/images/icons/delete-trash-icon.svg" alt="" />
+              </button>
+            </div>
+            <button type="button" id="newItemBtn" class="btn add_user_btn" data-bs-toggle="modal"
+              data-bs-target="#addItemModal">
+              <a class="text-white text-decoration-none">New Items</a>
+            </button>
+          </div>
+
+
+          <!-- Table For Items Data -->
+          <div id="tableContent">
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- #region Modifier Tab-->
+    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    </div>
+    <!-- #endregion -->
+  </div>
+</div>
+
+
+<!-- Save Category Modal -->
+<div class="modal fade" tabindex="-1" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder">Add Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column align-items-center">
+        <form class="w-75" asp-action="SaveCategory" asp-controller="Menu" method="post" id="CategorySaveForm">
+          <input type="hidden" asp-for="@Model.Category.Id" id="ModalCategoryId" value="-1">
+          <div class="mb-3">
+            <input asp-for="@Model.Category.CategoryName" type="text" class="form-control" id="ModalCategoryName"
+              aria-describedby="emailHelp" placeholder="Name">
+          </div>
+          <div class="mb-3">
+            <textarea asp-for="@Model.Category.Description" type="text" class="form-control"
+              id="ModalCategoryDescription" placeholder="Description"></textarea>
+          </div>
+          <div class="d-flex flex-row justify-content-end">
+            <button type="submit" id="saveCategoryModalBtn" class="btn btn-primary mx-3">Save</button>
+            <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Delete Categoty Modal -->
+<div class="modal fade" tabindex="-1" id="deleteCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Category?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Add Item  Modal -->
+<div class="modal fade" tabindex="-1" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" id="addItemModalContent"></div>
+  </div>
+</div>
+
+<!-- Delete Item Modal -->
+<div class="modal fade" tabindex="-1" id="deleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Item?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" id="confirmItemDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Mass Delete Item Modal -->
+<div class="modal fade" tabindex="-1" id="massDeleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete selected Items?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" id="confirmMassItemDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Modifier Group Modal -->
+<div class="modal fade" tabindex="-1" id="modifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" id="addModifierGroupContent">
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Add Existing  Modifier Group Modal -->
+<div class="modal fade" tabindex="-1" id="existingModifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bolder">Select Existing Modifier</h5>
+        <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#modifierModal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column">
+        <div class="w-50">
+          <form class="d-flex position-relative" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" id="existingModifierSearch"
+              aria-label="Search" />
+            <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                alt="" /></label>
+          </form>
+        </div>
+
+        <div id="existingModifierModalContent">
+
+        </div>
+
+      </div>
+      <div class="modal-footer border-0 d-flex flex-row justify-content-end">
+        <button type="button" id="saveExitingMgBtn" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#modifierModal">Save</button>
+        <button type="button" class="btn cancle_btn" data-bs-toggle="modal" data-bs-target="#modifierModal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete Modifier Group Modal -->
+<div class="modal fade" tabindex="-1" id="deleteModifierGroupModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Modifier Group?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary delteModifierGroupBtn" id="confirmMGDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Modifier Item Modal -->
+<div class="modal fade" tabindex="-1" id="addModifierItem" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" id="addModifierModalContent">
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modifier Item Modal -->
+<div class="modal fade" tabindex="-1" id="deleteModifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Modifier?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary delteModifierModalBtn" id="confirmModifierDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+@section Scripts {
+
+  <!-- Category selection Javascript-->
+  <script>
+    $(document).ready(function () {
+      var categoryId = $('#category_listUl li:first>div>a').data("id");
+      $('#category_listUl li:first>div>a').addClass("category_active");
+      paginationAjax(1);
+    });
+
+    $('.list-items>div>a').on("click", function () {
+      $('.list-items').each(function () {
+        $('.list-items>div>a').removeClass("category_active");
+      });
+      categoryId = $(this).data("id");
+      $(this).addClass("category_active");
+      paginationAjax(1);
+    })
+  </script>
+
+  <!-- Items  Display With Pagination Javascript-->
+  <script>
+    function paginationAjax(currentPage) {
+      let pageSize = $('#selectPageSize').val();
+      let searchQuery = $('#search').val();
+      categoryId = $('.category_active').data("id");
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetItemList", "Menu")',
+        type: "GET",
+        data: { categoryId: categoryId, pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#tableContent").html(data);
+        },
+        error: function () {
+          console.log("No Projects Found");
+          $("#tableContent").html('No User Fetched');
+        }
+      })
+    }
+
+    //Items Display With Search Javascript
+
+    $("#search").on("input", function () {
+      currentPage = 1;
+      paginationAjax(currentPage);
+    });
+  </script>
+
+  <!-- Category Modal Validationns -->
+  <script>
+    $("#CategorySaveForm").submit(function () {
+      event.preventDefault();
+      let isValid = true;
+
+
+      //Required Field Validation
+      $("#CategorySaveForm input[type='text']").each(function () {
+        let inputValue = $(this).val().trim();
+
+        if (!inputValue || inputValue === "") {
+          $(this).addClass("is-invalid"); // Add error styling
+          $(this).next(".invalid-feedback").remove(); // Remove old message
+          $(this).after('<div class="invalid-feedback">This Field is required</div>');
+          isValid = false;
+        }
+        else {
+          $(this).removeClass("is-invalid");
+          $(this).next(".invalid-feedback").remove();
+        }
+      });
+
+      if (isValid) {
+        $('#CategorySaveForm').off("submit").submit();
+      }
+
+      $("#CategorySaveForm input[type='text']").on("input change", function () {
+        $(this).removeClass("is-invalid");
+        $(this).next(".invalid-feedback").remove();
+      })
+    });
+
+  </script>
+
+  <!-- Edit and Delete button visibility on hover  -->
+  <script>
+    $('.list-items').mouseover(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "visible");
+    })
+    $('.list-items').mouseout(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "hidden");
+    })
+
+    var categoryId = -1;
+
+    $('.editCategoryBtn').on("click", function () {
+      categoryId = $(this).data("id");
+      $('#saveCategoryModalBtn').data("id", categoryId);
+
+      $.ajax({
+        url: "/Menu/GetCategoryById",
+        type: "GET",
+        data: { id: categoryId },
+        success: function (response) {
+          $('#ModalCategoryName').val(response.categoryName);
+          $('#ModalCategoryDescription').val(response.description);
+          $('#ModalCategoryId').val(categoryId);
+        },
+        error: function () {
+          toastr.error("Failed To Edit Category");
+        }
+      });
+    });
+
+
+    // Handle Delete Confirmation Click
+    $('.deleteCategoryBtn').on("click", function () {
+      categoryId = $(this).data("id");
+      $("#confirmDeleteBtn").on("click", function () {
+        if (categoryId) {
+          $.ajax({
+            url: "/Menu/DeleteCategory",
+            type: "POST",
+            data: { id: categoryId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteCategoryModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- ----------------------------------------------------------- Load Add/Edit Item Modal  Javascript--------------------------------------------------------->
+
+  <script>
+    function loadItemModal(id) {
+
+      $.ajax({
+        url: '@Url.Action("SaveItem", "Menu")',
+        type: "GET",
+        data: { id: id },
+        dataType: "html",
+        success: function (data) {
+          selectedModifiers = [];
+          $("#addItemModalContent").html(data);
+          $('#categorySelect').val(categoryId);
+          $(".modifierGroup").each(function () {
+            var id = $(this).data("mgitemid");
+            selectedModifiers.push({
+              ModifierGroupId: id
+            });
+          })
+        },
+        error: function () {
+          $("#addItemModalContent").html('No User Fetched');
+        }
+      })
+    }
+
+    $('#newItemBtn').on("click", function () {
+      loadItemModal(0);
+    });
+
+    $(document).on("click", ".editItemBtn", function () {
+      loadItemModal($(this).data("id"));
+    })
+
+    $(document).on("click", "#submitAddItemForm", function () {
+      SubmitAddItem();
+      $("#menuItemForm").off('submit').submit();
+    })
+  </script>
+
+  <!-- ----------------------------------------------------------- Select Modifier in Add edit Item modal Javascript--------------------------------------------------------->
+
+  <script>
+    let selectedModifiers = [];
+
+    function getModifierItemAjax(modifierGroupId) {
+      $.ajax({
+        url: '@Url.Action("GetModifierItemById", "Menu")',
+        type: "GET",
+        data: { modifierId: modifierGroupId },
+        success: function (data) {
+          $("#mgItemList").append(data);
+        },
+        error: function () {
+          console.log("Error Appending Data");
+        }
+      })
+    }
+
+
+    $(document).on("change", "#selectModifiers", function () {
+      var modifierGroupId = $(this).val();
+
+      if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
+        selectedModifiers.push(Number(modifierGroupId));
+        getModifierItemAjax(modifierGroupId);
+      }
+
+      $("#selectModifiers").val("-2");
+    })
+
+    // Remove Modifier Group
+    $(document).on("click", ".removeModifierGroup", function () {
+      let removeteModifierGroupID = $(this).data("mgitemid");
+      selectedModifiers = $.grep(selectedModifiers, function (selectedModifiers) {
+        return Number(selectedModifiers.ModifierGroupId) !== removeteModifierGroupID;
+      });
+      $("div").remove(".modifierGroup[data-mgitemid='" + removeteModifierGroupID + "']");
+    });
+  </script>
+
+
+  <!-- ----------------------------------------------------------- Handle Delete Item in Items Tab Javascript--------------------------------------------------------->
+
+  <script>
+    $(document).on("click", ".deleteItemBtn", function () {
+      itemId = $(this).data("id");
+      $("#confirmItemDeleteBtn").on("click", function () {
+        if (itemId) {
+          $.ajax({
+            url: "/Menu/DeleteItem",
+            type: "POST",
+            data: { id: itemId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteItemModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- ----------------------------------------------------------- Mass delete Diasble Property Javascript--------------------------------------------------------->
+
+  <script>
+    $(document).ready(function () {
+      $("#MassdeleteItemBtn").prop("disabled", true);
+    });
+
+    function toggleMasterDeleteBtn() {
+      if ($(".itemCheckBox:checked").length > 0) {
+        $("#MassdeleteItemBtn").prop("disabled", false);
+      }
+      else {
+        $("#MassdeleteItemBtn").prop("disabled", true);
+      }
+    }
+
+    $(document).on("change", "#itemSuperCheckbox", function () {
+      $(".itemCheckBox").each(function () {
+        $(this).prop("checked", $("#itemSuperCheckbox").prop("checked"));
+      });
+      toggleMasterDeleteBtn();
+    });
+
+    $(document).on("change", ".itemCheckBox", function () {
+      let totalSubCheckBox = $(".itemCheckBox").length;
+      let checkedSubCheckBox = $(".itemCheckBox:checked").length;
+      if (checkedSubCheckBox === totalSubCheckBox) {
+        $("#itemSuperCheckbox").prop("indeterminate", false).prop("checked", true);
+      }
+      else if (checkedSubCheckBox === 0) {
+        $("#itemSuperCheckbox").prop("indeterminate", false).prop("checked", false);
+      }
+      else {
+        $("#itemSuperCheckbox").prop("indeterminate", true);
+      }
+      toggleMasterDeleteBtn();
+    });
+
+  </script>
+
+
+  <!-- ----------------------------------------------------------- Handle Mass Delete Item Javascript--------------------------------------------------------->
+
+  <script>
+
+    $(document).on("click", "#MassdeleteItemBtn", function () {
+      // Fetch the Item id for selected CheckBoxes
+      var selectedItemList = [];
+      $('.itemCheckBox:checked').each(function () {
+        var id = $(this).data("id");
+        selectedItemList.push(id);
+      })
+
+      // Delete modal for Mass Deletion
+      $("#confirmMassItemDeleteBtn").on("click", function () {
+        if (selectedItemList.length > 0) {
+          $.ajax({
+            url: "/Menu/DeleteSelectedItems",
+            type: "POST",
+            data: { id: selectedItemList },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteItemModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+
+    })
+  </script>
+
+
+
+  <!-- ----------------------------------------------------------- Modifiers Tab Partial View AJAX call Javascript--------------------------------------------------------->
+
+  <script>
+    $('#profile-tab').on("click", function () {
+      $.ajax({
+        url: "/Menu/ModifiersTab",
+        type: "GET",
+        success: function (data) {
+          $('#profile-tab-pane').html(data);
+          InitializeModifier();
+        },
+        error: function () {
+          $("#profile-tab-pane").html('No Modifiers Fetched');
+        }
+      });
+    });
+  </script>
+
+
+
+  <!-- ----------------------------------------------------------- Modifier Items according to modifier_active group Partial View AJAX call Javascript--------------------------------------------------------->
+
+  <script>
+    function ModifierPaginationAjax(currentPage) {
+      let pageSize = $('#modifierPageSize').val();
+      let searchQuery = $('#modifierSearch').val();
+      modifierGroupId = $('.modifier_active').data("mgid");
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetModifierItems", "Menu")',
+        type: "GET",
+        data: { modifierGroupId: modifierGroupId, pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#modifierTableContent").html(data);
+        },
+        error: function () {
+          $("#modifierTableContent").html('No User Fetched');
+        }
+      })
+    }
+
+    //Items Display With Search Javascript
+
+    $(document).on("input", "#modifierSearch", function () {
+      currentPage = 1;
+      ModifierPaginationAjax(currentPage);
+    });
+  </script>
+
+
+  <!-- ----------------------------------------------------------- Load first Modifier Item and Highlighted Class Javascript--------------------------------------------------------->
+  <script>
+    function InitializeModifier() {
+      $('#modifier_listUl li:first>div>a').addClass("modifier_active");
+      ModifierPaginationAjax(1);
+    };
+
+    $(document).on("click", '.mg-list-items>div>a', function () {
+      $('.mg-list-items').each(function () {
+        $('.mg-list-items>div>a').removeClass("modifier_active");
+      });
+      modifierId = $(this).data("mgid");
+      $(this).addClass("modifier_active");
+      ModifierPaginationAjax(1);
+    })
+  </script>
+
+  <script>
+    $(document).on("mouseover", '.mg-list-items', function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "visible");
+    })
+    $(document).on("mouseout", '.mg-list-items', function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "hidden");
+    })
+  </script>
+
+
+
+
+  <!-- ----------------------------------------------------------- Load Existing Modifier Item In Modifier Modal Javascript--------------------------------------------------------->
+
+  <script>
+    function LoadModifierItem(currentPage) {
+      let pageSize = $('#modifierItemPageSize').val();
+      let searchQuery = $('#existingModifierSearch').val();
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetAllModifierItems", "Menu")',
+        type: "GET",
+        data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#existingModifierModalContent").html(data);
+          checkBoxModifierItemInModal();
+        },
+        error: function () {
+          console.log("No Projects Found");
+          $("#existingModifierModalContent").html('No User Fetched');
+        }
+      })
+    }
+
+    $(document).on('click', '.existingModifierBtn', function () {
+      LoadModifierItem(1);
+    })
+
+    let debounceTimer;
+    $(document).on("input", "#existingModifierSearch", function () {
+      let searchValue = $(this).val().trim();
+
+      if (searchValue.length > 0) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          LoadModifierItem(1);
+        }, 300);
+      }
+    });
+
+  </script>
+  <!-- ----------------------------------------------------------- Modifier Group Add Edit Javascript--------------------------------------------------------->
+
+  <script>
+    var selectedExistingModifiers = [];
+    function loadModifierGroup(id) {
+      $.ajax({
+        url: '@Url.Action("SaveModifierGroup", "Menu")',
+        type: "GET",
+        data: { id: id },
+        dataType: "html",
+        success: function (data) {
+          $("#addModifierGroupContent").html(data);
+          selectedExistingModifiers = [];
+          $('.existModifiers').each(function () {
+            var id = $(this).data("mgitemid");
+            selectedExistingModifiers.push({ ModifierItemId: id });
+          });
+        },
+        error: function () {
+          $("#addModifierGroupContent").html('No Modifier Group');
+        }
+      })
+    }
+
+    $(document).on("click", "#modifierGroupAddModalBtn", function () {
+      loadModifierGroup(0);
+    })
+
+    $(document).on("click", ".editModifierGroupBtn", function () {
+      loadModifierGroup($(this).data("mgid"));
+    })
+
+
+    function AppendModifiers(id, name) {
+      $('.existingModifierList').append(`
+                        <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="${id}" style="border: 1px solid grey; border-radius: 15px;">
+                            ${name}
+                            <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
+                        </span>
+                      `);
+    }
+
+    @* $(document).on("click", "#saveExitingMgBtn", function () {
+      selectedExistingModifiers = [];
+
+        $(".modifierItemCheckBox:checked").each(function () {
+          var id = $(this).data("mg-item-id");
+          var name = $(this).data("mg-item-name");
+
+          if (selectedExistingModifiers.indexOf(Number(id)) == -1) {
+            selectedExistingModifiers.push({ ModifierItemId: Number(id) });
+            AppendModifiers(id, name);
+          }
+
+        })
+    }) *@
+
+    function checkBoxModifierItemInModal() {
+      $.each(selectedExistingModifiers, function (index, id) {
+        $('.modifierItemCheckBox[data-mg-item-id="' + id.ModifierItemId + '"]').prop("checked", true);
+      });
+    }
+
+    $(document).on("change", '.modifierItemCheckBox', function () {
+      let id = $(this).data("mg-item-id");
+      var name = $(this).data("mg-item-name");
+      if (!selectedExistingModifiers.some(e => e.ModifierItemId===Number(id))) {
+        selectedExistingModifiers.push({ ModifierItemId: Number(id) });
+        AppendModifiers(id, name);
+      }
+      else {
+        selectedExistingModifiers = $.grep(selectedExistingModifiers, function (selectedExistingModifiers) {
+          return selectedExistingModifiers.ModifierItemId !== id;
+        });
+        $("span").remove(".existModifiers[data-mgitemid='" + id + "']");
+      }
+    })
+
+    $(document).on("click", "#submitMgBtn", function () {
+      $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
+      $("#submitModifierGroupForm").off('submit').submit();
+    })
+
+
+    // Handle Delete Modifier Group Confirmation Click
+    $(document).on("click", '.deleteModifierGroupBtn', function () {
+      let modifierGroupId = $(this).data("mgid");
+      $("#confirmMGDeleteBtn").on("click", function () {
+        if (modifierGroupId) {
+          $.ajax({
+            url: "/Menu/DeleteModifierGroup",
+            type: "POST",
+            data: { id: modifierGroupId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteModifierGroupModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
+
+    // Remove Added Modifier Item
+    $(document).on("click", ".removeAddedModifierItem", function () {
+      let removeteModifierItemID = $(this).data("mgitemid");
+      selectedExistingModifiers = $.grep(selectedExistingModifiers, function (selectedExistingModifiers) {
+        return selectedExistingModifiers.ModifierItemId !== removeteModifierItemID;
+      });
+      $("span").remove(".existModifiers[data-mgitemid='" + removeteModifierItemID + "']");
+    });
+
+  </script>
+
+  <!-- ----------------------------------------------------------- Modifier Items Add Edit Javascript--------------------------------------------------------->
+
+  <script>
+    function loadModifierItemModal(id) {
+      $.ajax({
+        url: '@Url.Action("SaveModifier", "Menu")',
+        type: "GET",
+        data: { id: id },
+        dataType: "html",
+        success: function (data) {
+          $("#addModifierModalContent").html(data);
+          $('#modifierSelect').val(modifierGroupId);
+        },
+        error: function () {
+          $("#addModifierModalContent").html('Try Again');
+        }
+      })
+    }
+
+
+    $(document).on("click", "#newModifierBtn", function () {
+      loadModifierItemModal(0);
+    });
+
+    $(document).on("click", '.modifierEditBtn', function () {
+      loadModifierItemModal($(this).data("mg-item-id"));
+    });
+  </script>
+
+  <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->
+
+  <script>
+    $(document).on("click", ".modifierDeleteBtn", function () {
+      modifierId = $(this).data("mg-item-id");
+      $("#confirmModifierDeleteBtn").on("click", function () {
+        if (modifierId) {
+          $.ajax({
+            url: "/Menu/DeleteModifier",
+            type: "POST",
+            data: { id: modifierId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteModifierModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
+  </script>
+}

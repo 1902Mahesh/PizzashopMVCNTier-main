@@ -1,0 +1,268 @@
+@model DataLogicLayer.ViewModels.ProfileDataViewModel;
+@{
+    ViewData["Title"] = "Dashboard Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+    <div class="user_list_header">
+        <div class="user_header fs-2 fs-lg-1">
+            <span>My Profile</span>
+        </div>
+    </div>
+
+    <div class="form_container">
+        <div>
+            <img src="~/images/profile_div_bg.jpg" alt="" class="w-100" height="60px" style="object-fit: cover;">
+        </div>
+        <div class="d-flex image_div">
+            <div class="rounded-circle position-relative bg-white" id="profileImageContainer">
+                <img id="previewProfileImage"
+                    src="@(!string.IsNullOrEmpty(Model.Imgurl) ? Model.Imgurl : "/uploads/Default_pfp.svg.png")"
+                    @* src="/uploads/Default_pfp.svg.png" *@
+                    @* src="/uploads/@(!string.IsNullOrEmpty(Model.Imgurl) ? Model.Imgurl : "Default_pfp.svg.png")" *@
+                    alt="" class="rounded-circle border border-dark object-fit-cover" width="120px" height="120px">
+            </div>
+            <div class="rounded-circle position-relative bg-white" id="cameraImageContainer">
+                <img src="~/images/icons/camera.svg" alt="" class="" height="30px">
+            </div>
+            <div class="d-flex flex-column w-100 px-3 py-3">
+                <div class="d-flex flex-column flex-sm-row justify-content-between">
+                    <span class="fs-4" style="font-weight: 500;">@Model.firstName @Model.lastName</span>
+                    <span class="pt-2">@Model.Email</span>
+                </div>
+                <span>@Model.Role</span>
+            </div>
+        </div>
+
+        <form id="profileForm" asp-action="ProfileDetails" asp-controller="Dashboard" method="post"
+            enctype="multipart/form-data">
+            <input type="file" id="uploadImage" name="ProfileImage" hidden />
+            <input type="hidden" name="ProfileImagePath" />
+
+            <div class="row">
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.firstName" type="text" class="form-control" id="firstName"
+                        placeholder="John" />
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.lastName" type="text" class="form-control" id="lastName" placeholder="Doe" />
+                    <label for="lastName">Last Name</label>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.userName" type="text" class="form-control" id="username"
+                        placeholder="john123" />
+                    <label for="username">User Name</label>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.phoneNo" type="text" class="form-control" id="phone"
+                        placeholder="9879898798" />
+                    <label for="phone">Phone</label>
+                </div>
+
+                <!-- Country, State, City Dropdowns -->
+                <div class="form-floating col-md-12 col-lg-4 mb-3">
+                    <select asp-for="CountryId" class="form-select" id="country">
+                        <option value="">Select Country</option>
+                        @foreach (var country in Model.Countries)
+                        {
+                            <option value="@country.CountryId">@country.Name</option>
+                        }
+                    </select>
+                    <label for="country">Country</label>
+                </div>
+                <div class="form-floating col-md-12 col-lg-4 mb-3">
+                    <select asp-for="StateId" class="form-select" id="state">
+                        <option value="">Select State</option>
+                        @foreach (var state in Model.States)
+                        {
+                            <option value="@state.StateId">@state.Name</option>
+                        }
+                    </select>
+                    <label for="state">State</label>
+                </div>
+                <div class="form-floating col-md-12 col-lg-4 mb-3">
+                    <select asp-for="CityId" class="form-select" id="city">
+                        <option value="">Select City</option>
+                        @foreach (var city in Model.Cities)
+                        {
+                            <option value="@city.CityId">@city.Name</option>
+                        }
+                    </select>
+                    <label for="city">City</label>
+                </div>
+
+                <div class="form-floating col-md-12 col-lg-8 mb-3">
+                    <input asp-for="@Model.address" type="text" class="form-control" id="address" placeholder="" />
+                    <label for="address">Address</label>
+                </div>
+                <div class="form-floating col-md-12 col-lg-4 mb-3">
+                    <input asp-for="@Model.zipcode" type="text" class="form-control" id="zipcode" placeholder="" />
+                    <label for="zipcode">Zipcode</label>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn create_user_btn me-2">Update</button>
+                <a type="button" asp-action="Index" asp-controller="Dashboard" class="btn cancel_btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Trigger file input when clicking the camera icon
+            $("#cameraImageContainer").click(function () {
+                $("#uploadImage").click();
+            });
+
+            // Show selected image preview
+            $("#uploadImage").change(function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#previewProfileImage").attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Country -> State Dropdown Update
+            $("#country").change(function () {
+                var countryId = $(this).val();
+                if (countryId) {
+                    $.ajax({
+                        url: '@Url.Action("GetStatesByCountry", "Dashboard")',
+                        type: "GET",
+                        data: { countryId: countryId },
+                        success: function (states) {
+                            $("#state").empty().append('<option value="">Select State</option>');
+                            $("#city").empty().append('<option value="">Select City</option>');
+                            $.each(states, function (index, state) {
+                                $("#state").append('<option value="' + state.stateId + '">' + state.name + '</option>');
+                            });
+                        },
+                        error: function () {
+                            console("Error loading states");
+                        }
+                    });
+                }
+            });
+            @* Cities *@
+            $("#state").change(function () {
+                var stateId = $(this).val();
+
+                if (stateId) {
+                    $.ajax({
+                        url: '@Url.Action("GetCitiesByState", "Dashboard")',
+                        type: "GET",
+                        data: { id: stateId },
+                        success: function (cities) {
+                            $("#city").empty().append('<option value="">Select City</option>');
+
+                            if (cities.length > 0) {
+                                $.each(cities, function (index, city) {
+                                    $("#city").append('<option value="' + city.cityId + '">' + city.name + '</option>');
+                                });
+
+                                // Automatically select the first city
+                                $("#city").val(cities[0].id).trigger("change");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error loading cities:", error); // Debugging Log
+                            alert("Error loading cities");
+                        }
+                    });
+                }
+            });
+
+
+            $("#profileForm").submit(function (event) {
+            event.preventDefault();
+            let isValid = true;
+
+                // Required Field Validation (Except Image)
+                $("#profileForm input[type='text'], #profileForm select").each(function () {
+                    let inputValue = $(this).val().trim();
+
+                    if (!inputValue || inputValue === "0") {
+                        $(this).addClass("is-invalid"); // Add error styling
+                        $(this).next(".invalid-feedback").remove(); // Remove old message
+                        $(this).after('<div class="invalid-feedback">This field is required</div>');
+                        isValid = false;
+                    } else {
+                        $(this).removeClass("is-invalid");
+                        $(this).next(".invalid-feedback").remove();
+                    }
+                });
+
+                //Phone Number Validation (Must be 10 Digits)
+                let phoneNumber = $("#phone").val().trim();
+                if (phoneNumber === "" || phoneNumber === "0" || !/^\d{10}$/.test(phoneNumber)) {
+                    $("#phone").addClass("is-invalid");
+                    $("#phone").next(".invalid-feedback").remove();
+                    $("#phone").after('<div class="invalid-feedback">Phone number must be exactly 10 digits</div>');
+                    isValid = false;
+                } else {
+                    $("#phone").removeClass("is-invalid");
+                    $("#phone").next(".invalid-feedback").remove();
+                }
+
+                // Zipcode Validation (Must Not Be Empty or 0)
+                let zipcode = $("#zipcode").val().trim();
+                if (zipcode === "" || zipcode === "0") {
+                    $("#zipcode").addClass("is-invalid");
+                    $("#zipcode").next(".invalid-feedback").remove();
+                    $("#zipcode").after('<div class="invalid-feedback">Zipcode is required</div>');
+                    isValid = false;
+                } else {
+                    $("#zipcode").removeClass("is-invalid");
+                    $("#zipcode").next(".invalid-feedback").remove();
+                }
+
+                // Submit form only if valid
+                if (isValid) {
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: '@Url.Action("ProfileDetails", "Dashboard")',
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if(response.success)
+                            {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    location.reload(); // Refresh user list
+                                }, 2000);
+                            }
+                            else{
+                                toastr.error(response.message);
+                                setTimeout(function () {
+                                    location.reload(); // Refresh user list
+                                }, 3000);
+                            }
+                        },
+                        error: function () {
+                            toastr.error("Error updating profile");
+                        }
+                    });
+                }
+            });
+
+    // Remove error styling when user types
+    $("#profileForm input, #profileForm select").on("input change", function () {
+        $(this).removeClass("is-invalid");
+        $(this).next(".invalid-feedback").remove();
+    });
+        });
+    </script>
+}

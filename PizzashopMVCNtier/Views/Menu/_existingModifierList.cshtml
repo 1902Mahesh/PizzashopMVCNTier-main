@@ -1,0 +1,78 @@
+@model DataLogicLayer.ViewModels.ModifierItemListViewModel
+<div class="table-responsive w-100">
+<table class="table">
+    <thead>
+        <tr>
+            <th id="itemName" scope="col">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="selectAll" onclick="toggleCheckBoxes(this)" />
+                    <label class="form-check-label" for="selectAll">Name</label>
+                </div>
+            </th>
+            <th scope="col">Unit</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var modifierItem in Model.ModifierItemList)
+        {
+            <tr>
+                <td class="user_profile">
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="checkbox" class="form-check-input modifierItemCheckBox" data-mg-item-id="@modifierItem.ModifierItemId" data-mg-item-name="@modifierItem.Name"/>
+                        @modifierItem.Name
+                    </div>
+                </td>
+                <td>
+                    @modifierItem.Unit
+                </td>
+                <td>@modifierItem.Rate</td>
+                <td>@modifierItem.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<!-- Paggination Frontend Start -->
+<div class="d-flex flex-sm-row flex-column align-items-sm-center justify-content-end pagination_container">
+    <div class="d-flex flex-row align-items-center">
+        <span>Items per page:</span>
+
+        <!-- Page  Numbers Drop Down -->
+        <select class="form-select w-auto" onchange="LoadModifierItem(1)" aria-label="Default select example" id="modifierItemPageSize">
+            @if (Model.Page.PageSize != null)
+            {
+                <option value="3" selected="@(Model.Page.PageSize == 3 ? true : false)">3</option>
+                <option value="5" selected="@(Model.Page.PageSize == 5 ? true : false)">5</option>
+                <option value="10" selected="@(Model.Page.PageSize == 10 ? true : false)">10</option>
+                <option value="15" selected="@(Model.Page.PageSize == 15 ? true : false)">15</option>
+            }
+        </select>
+    </div>
+
+    <span style="margin-left: 8px" class="pagination_details">
+        Showing @Model.Page.FromRec - @Model.Page.ToRec of @Model.Page.TotalRecords
+
+    </span>
+
+    @if (Model.Page.TotalPages >= 1)
+    {
+        <div>
+            <!-- Previous Page button-->
+
+            <button type="button" class="btn border border-black prev_page" id="prevPageIcon" @(Model.Page.CurrentPage > 1 ?
+                " " : "disabled") onclick="LoadModifierItem(@Model.Page.CurrentPage-1)">
+                <img src="~/images/icons/chevron-left.svg" alt="" />
+            </button>
+
+            <!-- Next Page button-->
+            <button type="button" class="btn border border-black" id="nextPageIcon" @(Model.Page.CurrentPage <
+                Model.Page.TotalPages ? " " : "disabled") onclick="LoadModifierItem(@Model.Page.CurrentPage+1)">
+            <img src="~/images/icons/chevron-right.svg" alt="" />
+        </button>
+    </div>
+        }
+</div>
+<!-- Pagination Frontend Ends -->

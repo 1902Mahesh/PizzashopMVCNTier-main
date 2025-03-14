@@ -1,0 +1,244 @@
+﻿@model DataLogicLayer.ViewModels.EditUserViewModel
+@{
+  ViewData["Title"] = "Edit User Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+  <!-- Edit User Starts-->
+  <div class="d-flex flex-row justify-content-between user_list_header">
+    <!-- Edit User Header -->
+    <div class="user_header fs-2 fs-lg-1">
+      <span>Edit User</span>
+    </div>
+    <!-- Back Button -->
+    <a asp-action="Index" asp-controller="User" class="btn back_btn d-flex align-items-center justify-content-center">
+      <img src="~/images/icons/chevron-left.svg" alt="" />
+      Back
+    </a>
+  </div>
+
+  <!-- Edit User Form Starting -->
+  <div class="form_container">
+    <form method="post" id="editUserForm" asp-action="EditUser" asp-controller="User" enctype="multipart/form-data">
+      <input type="hidden" id="" asp-for="@Model.UserId" value="@Model.UserId">
+      <div class="row">
+        <div class="form-floating col-md-6 mb-3">
+          <input type="text" asp-for="@Model.FirstName" class="form-control" id="firstName" placeholder="John" />
+          <label for="firstName">First Name</label>
+        </div>
+        <div class="form-floating col-md-6 mb-3">
+          <input type="text" asp-for="@Model.LastName" class="form-control" id="lastName" placeholder="Doe" />
+          <label for="lastName">Last Name</label>
+        </div>
+        <div class="form-floating col-md-6 mb-3">
+          <input type="text" asp-for="@Model.UserName" class="form-control" id="username" placeholder="john123" />
+          <label for="username">User Name</label>
+        </div>
+        <div class="form-floating col-md-6 mb-3">
+          <select asp-for="RoleId" class="form-select" id="roles">
+            <option value="">Select Role</option>
+            @foreach (var role in Model.Roles)
+            {
+              <option value="@role.RoleId">@role.Rolename</option>
+            }
+          </select>
+          <label for="role">Role</label>
+        </div>
+        <input type="hidden" id="" asp-for="@Model.Email" value="@Model.Email">
+
+        <div class="form-floating col-md-6 mb-3">
+          <input type="email" value="@Model.Email" class="form-control" id="email" placeholder="john123@gmail.com"
+            disabled />
+          <label for="email">Email</label>
+        </div>
+        <div class="form-floating col-md-6 mb-3 position-relative">
+          <select class="form-select" aria-label="Default select example" id="status" name="status">
+            <option value="true" selected="@(Model.Status)">Active</option>
+            <option value="false" selected="@(!Model.Status)">Inactive</option>
+
+          </select>
+
+          <label for="role">Status</label>
+        </div>
+        <div class="browse_file col-12 mb-3 d-flex justify-content-center">
+          <input type="file" id="file" class="" asp-for="@Model.ProfileImage" />
+          <label for="file" class="browse_file_label d-flex flex-column align-items-center justify-content-center">
+            <img src="~/images/icons/cloud-arrow-up.svg" alt="" width="20px" />
+            <p id="browseFile" class="m-0">@(!string.IsNullOrEmpty(Model.ImgUrl) ? Model.ImgUrl.Split('_')[1] : "Browse File")</p>
+          </label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <select asp-for="CountryId" class="form-select" id="country">
+            <option value="">Select Country</option>
+            @foreach (var country in Model.Countries)
+            {
+              <option value="@country.CountryId">@country.Name</option>
+            }
+          </select>
+
+          <label for="country">Country</label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <select asp-for="StateId" class="form-select" id="state">
+            <option value="">Select State</option>
+            @foreach (var state in Model.States)
+            {
+              <option value="@state.StateId">@state.Name</option>
+            }
+          </select>
+          <label for="state">State</label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <select asp-for="CityId" class="form-select" id="city">
+            <option value="">Select City</option>
+            @foreach (var city in Model.Cities)
+            {
+              <option value="@city.CityId">@city.Name</option>
+            }
+          </select>
+          <label for="city">City</label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <input type="text" asp-for="@Model.Zipcode" class="form-control" id="zipcode" placeholder="" />
+          <label for="zipcode">Zipcode</label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <input type="text" asp-for="@Model.Address" class="form-control" id="address" placeholder="" />
+          <label for="address">Address</label>
+        </div>
+        <div class="form-floating col-md-6 col-lg-4 mb-3">
+          <input type="text" asp-for="@Model.Phone" class="form-control" id="phone" placeholder="9879898798" />
+          <label for="phone">Phone</label>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <button type="submit" class="btn create_user_btn">Update User</button>
+      <a type="button" asp-action="Index" asp-controller="User" class="btn cancle_btn">Cancel</a>
+    </form>
+  </div>
+</div>
+
+
+@section Scripts {
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Country -> State Dropdown Update
+      $("#country").change(function () {
+        var countryId = $(this).val();
+        if (countryId) {
+          $.ajax({
+            url: '@Url.Action("GetStatesByCountry", "Dashboard")',
+            type: "GET",
+            data: { countryId: countryId },
+            success: function (states) {
+              $("#state").empty().append('<option value="">Select State</option>');
+              $("#city").empty().append('<option value="">Select City</option>');
+              $.each(states, function (index, state) {
+                $("#state").append('<option value="' + state.stateId + '">' + state.name + '</option>');
+              });
+            },
+            error: function () {
+              console("Error loading states");
+            }
+          });
+        }
+      });
+      @* Cities *@
+        $("#state").change(function () {
+          var stateId = $(this).val();
+
+          if (stateId) {
+            $.ajax({
+              url: '@Url.Action("GetCitiesByState", "Dashboard")',
+              type: "GET",
+              data: { id: stateId },
+              success: function (cities) {
+                $("#city").empty().append('<option value="">Select City</option>');
+
+                if (cities.length > 0) {
+                  $.each(cities, function (index, city) {
+                    $("#city").append('<option value="' + city.cityId + '">' + city.name + '</option>');
+                  });
+
+                  // Automatically select the first city
+                  $("#city").val(cities[0].id).trigger("change");
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error("Error loading cities:", error); // Debugging Log
+                alert("Error loading cities");
+              }
+            });
+          }
+        });
+
+      $('#file').change(function () {
+        let file = this.files[0];
+        $('#browseFile').text(file.name);
+      })
+
+
+      /*
+          <------ Client Side Validation For the form submission
+      */
+      $('#editUserForm').submit(function (event) {
+        event.preventDefault();
+        let isValid = true;
+
+
+        //Required Field Validation (Except Image)
+        $("#editUserForm input[type='text'], #editUserForm select").each(function () {
+          let inputValue = $(this).val().trim();
+
+          if (!inputValue || inputValue === "0") {
+            $(this).addClass("is-invalid"); // Add error styling
+            $(this).next(".invalid-feedback").remove(); // Remove old message
+            $(this).after('<div class="invalid-feedback">This field is required</div>');
+            isValid = false;
+          } else {
+            $(this).removeClass("is-invalid");
+            $(this).next(".invalid-feedback").remove();
+          }
+        })
+
+        //Phone Number Validation (Must be 10 Digits)
+        let phoneNumber = $("#phone").val().trim();
+        if (phoneNumber === "" || phoneNumber === "0" || !/^\d{10}$/.test(phoneNumber)) {
+            $("#phone").addClass("is-invalid");
+            $("#phone").next(".invalid-feedback").remove();
+            $("#phone").after('<div class="invalid-feedback">Phone number must be exactly 10 digits</div>');
+            isValid = false;
+        } else {
+            $("#phone").removeClass("is-invalid");
+            $("#phone").next(".invalid-feedback").remove();
+        }
+
+
+        // Zipcode Validation (Must Not Be Empty or 0)
+        let zipcode = $("#zipcode").val().trim();
+        if (zipcode === "" || zipcode === "0") {
+          $("#zipcode").addClass("is-invalid");
+          $("#zipcode").next(".invalid-feedback").remove();
+          $("#zipcode").after('<div class="invalid-feedback">Zipcode is required</div>');
+          isValid = false;
+        } else {
+          $("#zipcode").removeClass("is-invalid");
+          $("#zipcode").next(".invalid-feedback").remove();
+        }
+
+
+        if (isValid) {
+          $("#editUserForm").off("submit").submit();
+        }
+      });
+      // Remove error styling when user types
+      $("#editUserForm input, #editUserForm select").on("input change", function () {
+        $(this).removeClass("is-invalid");
+        $(this).next(".invalid-feedback").remove();
+      });
+    });
+  </script>
+}

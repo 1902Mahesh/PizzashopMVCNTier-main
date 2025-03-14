@@ -1,0 +1,255 @@
+@model IEnumerable<DataLogicLayer.ViewModels.SectionViewModel>
+@{
+  ViewData["Title"] = "Table And Sections Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+  <!-- Header Menu -->
+  <div class="d-flex flex-row justify-content-between user_list_header">
+    <!-- Menu Header -->
+    <div class="user_header fs-2 fs-lg-1">
+      <span>Sections/Tables</span>
+    </div>
+  </div>
+  <!-- Tabs For Sections -->
+  <ul class="nav nav-tabs bg-white mb-3" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active ms-3 fs-5 tab_btn" id="home-tab" data-bs-toggle="tab"
+        data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+        <img src="~/images/icons/list-check.svg" alt="" class="pe-2" width="30px" />Sections
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content bg-white" id="pills-tabContent">
+    <div class="tab-pane fade show active p-0" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+      tabindex="0">
+      <div class="container-fluid d-flex flex-column flex-lg-row p-0">
+        <div class="fs-5 category_part">
+          <!-- Tab Content Part 2 -->
+          <div class="d-flex justify-content-between mb-4">
+            <h4 class="heading_color fw-bold">Sections</h4>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#addEditSectionModal"
+              id="sectionAddModalBtn">
+              <img src="~/images/icons/plus-square.svg" alt="" width="30px" />
+            </button>
+          </div>
+
+          <!-- Modifier List Starts -->
+          <div class="category_list">
+            <ul class="p-0" id="table_listUl">
+              @foreach (var sections in Model)
+              {
+                <li class="section-list-items pb-3 d-flex align-items-center justify-content-between">
+                  <div>
+                    <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
+                    <a data-sectionid="@sections.SectionID">@sections.Name</a>
+                  </div>
+                  <div class="editDeleteBtn d-flex">
+                    <button class="btn user_action p-0 me-1 editSectionBtn" id="editButton"
+                      data-sectionid="@sections.SectionID" data-bs-toggle="modal" data-bs-target="#addEditSectionModal">
+                      <img src="/images/icons/edit-pen.svg" alt="" />
+                    </button>
+                    <button class="btn user_action user_action_delete deleteSectionBtn p-0 me-1" id="confirmDeleteSection"
+                      data-sectionid="@sections.SectionID" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
+                      <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                    </button>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="w-100 table-responsive">
+          <p class="heading_color fs-4 fw-bold ms-2">Tables</p>
+          <div class="items_header_buttons d-flex justify-content-end me-3">
+            <div class="d-flex flex-row">
+              <form class="d-flex position-relative" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" id="tableSearch"
+                  aria-label="Search" />
+                <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                    alt="" /></label>
+              </form>
+              <button class="btn border border-black me-2">
+                <img src="~/images/icons/delete-trash-icon.svg" alt="" />
+              </button>
+            </div>
+            <button type="button" id="newTableBtn" class="btn add_user_btn" data-bs-target="#addTable"
+              data-bs-toggle="modal">
+              <a class="text-white text-decoration-none">New Table</a>
+            </button>
+          </div>
+
+
+          <!-- Table For Modifier Items Data -->
+          <div id="sectionTableContent">
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Save Section Modal -->
+<div class="modal fade" tabindex="-1" id="addEditSectionModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="sectionModalContent">
+
+    </div>
+  </div>
+</div>
+
+<!-- Delete Section Modal -->
+<div class="modal fade" tabindex="-1" id="deleteSectionModal" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Section?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary delteSectionModalBtn" id="confirmSectionDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts {
+
+  <!-- Category selection Javascript-->
+  <script>
+    $(document).ready(function () {
+      var sectionId = $('#table_listUl li:first>div>a').data("sectionid");
+      $('#table_listUl li:first>div>a').addClass("category_active");
+      loadTablesAjax(1);
+    });
+
+    $('.section-list-items>div>a').on("click", function () {
+      $('.section-list-items').each(function () {
+        $('.section-list-items>div>a').removeClass("category_active");
+      });
+      sectionId = $(this).data("sectionid");
+      $(this).addClass("category_active");
+      loadTablesAjax(1);
+    })
+  </script>
+
+  <!-- Edit and Delete button visibility on hover  -->
+  <script>
+    $('.section-list-items').mouseover(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "visible");
+    })
+    $('.section-list-items').mouseout(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "hidden");
+    })
+  </script>
+
+  <!-- Items  Display With Pagination Javascript-->
+  <script>
+    function loadTablesAjax(currentPage) {
+      let pageSize = $('#tablePageSize').val();
+      let searchQuery = $('#tableSearch').val();
+      sectionId = $('.category_active').data("sectionid");
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetTableList", "TableAndSection")',
+        type: "GET",
+        data: { sectionId: sectionId, pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#sectionTableContent").html(data);
+        },
+        error: function () {
+          console.log("No Table Found");
+          $("#sectionTableContent").html('No Table Fetched');
+        }
+      })
+    }
+
+    //Items Display With Search Javascript
+
+    $("#tableSearch").on("input", function () {
+      currentPage = 1;
+      loadTablesAjax(currentPage);
+    });
+  </script>
+
+  <!-- ----------------------------------------------------------- Load Add/Edit Section Modal Javascript--------------------------------------------------------->
+
+  <script>
+    function loadAddSectionModal(id) {
+
+      $.ajax({
+        url: '@Url.Action("SaveSection", "TableAndSection")',
+        type: "GET",
+        data: { sectionId: id },
+        dataType: "html",
+        success: function (data) {
+          $("#sectionModalContent").html(data);
+        },
+        error: function () {
+          $("#sectionModalContent").html('Try Again');
+        }
+      })
+    }
+
+    $('#sectionAddModalBtn').on("click", function () {
+      $("#sectionModalContent").empty();
+      loadAddSectionModal(0);
+    });
+
+    $(document).on("click", ".editSectionBtn", function () {
+      $("#sectionModalContent").empty();
+      loadAddSectionModal($(this).data("sectionid"));
+    })
+
+  </script>
+
+  <!-- ----------------------------------------------------------- Handle Delete Section Javascript--------------------------------------------------------->
+  <script>
+    $('.deleteSectionBtn').on("click", function () {
+      sectionId = $(this).data("sectionid");
+      $("#confirmSectionDeleteBtn").on("click", function () {
+        if (sectionId) {
+          $.ajax({
+            url: "/TableAndSection/DeleteSection",
+            type: "POST",
+            data: { sectionId: sectionId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteSectionModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Sections list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
+  </script>
+}
