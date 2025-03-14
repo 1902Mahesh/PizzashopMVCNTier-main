@@ -46,7 +46,6 @@
                       type="checkbox"
                       class="form-check-input"
                       id="selectAll"
-                      onclick="toggleCheckBoxes(this)"
                     />
                     <label class="form-check-label" for="exampleCheck1"
                       >Permisions</label
@@ -67,7 +66,7 @@
                     <div class="mb-3 form-check">
                       <input
                         type="checkbox"
-                        class="form-check-input"
+                        class="form-check-input permission-check-box"
                         id="exampleCheck1"
                         data-id="@permmission.PermissionId"
                       />
@@ -176,8 +175,53 @@
               toastr.error("Error updating Permissions");
             }
         });
+    });    
+  </script>
+  @* <script>
+    $(document).ready(function() {
+    // Disable all switches initially
+    $('.view_switch, .add_switch, .delete_switch').prop("disabled", true);
+
+    // Function to toggle switches based on the main permission checkbox
+    $('.form-check-input').on("change", function() {
+        var id = $(this).data("id");
+
+        if ($(this).prop("checked")) {
+            // Enable the View switch
+            $('.view_switch[data-id="' + id + '"]').prop("disabled", false);
+        } else {
+            // Disable and uncheck all switches
+            $('.view_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
+            $('.add_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
+            $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
+        }
     });
 
-    
-  </script>
+    // View switch behavior
+    $('.view_switch').on("change", function() {
+        var id = $(this).data("id");
+        var viewChecked = $(this).prop("checked");
+
+        $('.add_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", !viewChecked);
+        $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
+    });
+
+    // Add/Edit switch behavior
+    $('.add_switch').on("change", function() {
+        var id = $(this).data("id");
+        var addChecked = $(this).prop("checked");
+
+        $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", !addChecked);
+    });
+
+    // Master checkbox functionality
+    $('#selectAll').on("change", function() {
+        var isChecked = $(this).prop("checked");
+
+        // Toggle all checkboxes
+        $('.form-check-input').not(this).prop("checked", isChecked).trigger("change");
+    });
+});
+
+  </script> *@
 }

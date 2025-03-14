@@ -82,21 +82,15 @@
                         <span class="sidebar_desc">Dashboard</span>
                     </a>
                 </li>
-                <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
-                    <a asp-action="Index" asp-controller="User">
-                        <img src="~/images/icons/people.svg" alt="" />
-                        <span class="sidebar_desc">Users</span>
-                    </a>
-                </li>
-                @* @if (User.IsInRole("SuperAdmin"))
+                @if(permissions.Contains("Users_View"))
                 {
-                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
-                        <a asp-action="Role" asp-controller="RolePermission">
-                            <img src="~/images/icons/person-gear.svg" alt="" />
-                            <span class="sidebar_desc">Roles and Permisions</span>
+                    <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
+                        <a asp-action="Index" asp-controller="User">
+                            <img src="~/images/icons/people.svg" alt="" />
+                            <span class="sidebar_desc">Users</span>
                         </a>
                     </li>
-                } *@
+                }
                 @if(permissions.Contains("RoleAndPermission_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
@@ -106,37 +100,51 @@
                         </a>
                     </li>
                 }
-
-                <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
-                    <a asp-action="Index" asp-controller="Menu">
-                        <img src="~/images/icons/menu-icon.png" alt="" />
-                        <span class="sidebar_desc">Menu</span>
-                    </a>
-                </li>
-                <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
-                    <a asp-action="Index" asp-controller="TableAndSection">
-                        <img src="~/images/icons/square-fill.svg" alt="" />
-                        <span class="sidebar_desc">Table and Section</span>
-                    </a>
-                </li>
-                <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                    <a href="">
-                        <img src="~/images/icons/cash-coin.svg" alt="" />
-                        <span class="sidebar_desc">Taxes and Fees</span>
-                    </a>
-                </li>
-                <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
-                    <a href="">
-                        <img src="~/images/icons/clipboard-check.svg" alt="" />
-                        <span class="sidebar_desc">Order</span>
-                    </a>
-                </li>
-                <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
-                    <a href="">
-                        <img src="~/images/icons/person-rolodex.svg" alt="" />
-                        <span class="sidebar_desc">Customers</span>
-                    </a>
-                </li>
+                @if(permissions.Contains("Menu_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
+                        <a asp-action="Index" asp-controller="Menu">
+                            <img src="~/images/icons/menu-icon.png" alt="" />
+                            <span class="sidebar_desc">Menu</span>
+                        </a>
+                    </li>
+                }
+                @if(permissions.Contains("TableAndSection_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
+                        <a asp-action="Index" asp-controller="TableAndSection">
+                            <img src="~/images/icons/square-fill.svg" alt="" />
+                            <span class="sidebar_desc">Table and Section</span>
+                        </a>
+                    </li>
+                }
+                @if(permissions.Contains("TaxAndFee_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
+                        <a href="">
+                            <img src="~/images/icons/cash-coin.svg" alt="" />
+                            <span class="sidebar_desc">Taxes and Fees</span>
+                        </a>
+                    </li>
+                }
+                @if(permissions.Contains("Order_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
+                        <a href="">
+                            <img src="~/images/icons/clipboard-check.svg" alt="" />
+                            <span class="sidebar_desc">Order</span>
+                        </a>
+                    </li>
+                }
+                @if(permissions.Contains("Customers_View"))
+                {
+                    <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
+                        <a href="">
+                            <img src="~/images/icons/person-rolodex.svg" alt="" />
+                            <span class="sidebar_desc">Customers</span>
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
         <!-- Left Navigation Panel Ends -->
@@ -161,12 +169,15 @@
                                 <span class="sidebar_desc">Dashboard</span>
                             </a>
                         </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
-                            <a asp-action="Index" asp-controller="User">
-                                <img src="~/images/icons/people.svg" alt="" />
-                                <span class="sidebar_desc">Users</span>
-                            </a>
-                        </li>
+                        @if(permissions.Contains("Users_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
+                                <a asp-action="Index" asp-controller="User">
+                                    <img src="~/images/icons/people.svg" alt="" />
+                                    <span class="sidebar_desc">Users</span>
+                                </a>
+                            </li>
+                        }
                         @if(permissions.Contains("RoleAndPermission_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
@@ -176,36 +187,51 @@
                                 </a>
                             </li>
                         }
-                        <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
-                            <a asp-action="Index" asp-controller="Menu">
-                                <img src="~/images/icons/customer.svg" alt="" />
-                                <span class="sidebar_desc">Menu</span>
-                            </a>
-                        </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
-                            <a asp-action="Index" asp-controller="TableAndSection">
-                                <img src="~/images/icons/square-fill.svg" alt="" />
-                                <span class="sidebar_desc">Table and Section</span>
-                            </a>
-                        </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "Taxes" ? "active" : "")">
-                            <a href="">
-                                <img src="~/images/icons/cash-coin.svg" alt="" />
-                                <span class="sidebar_desc">Taxes and Fees</span>
-                            </a>
-                        </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
-                            <a href="">
-                                <img src="~/images/icons/clipboard-check.svg" alt="" />
-                                <span class="sidebar_desc">Order</span>
-                            </a>
-                        </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
-                            <a href="">
-                                <img src="~/images/icons/person-rolodex.svg" alt="" />
-                                <span class="sidebar_desc">Customers</span>
-                            </a>
-                        </li>
+                        @if(permissions.Contains("Menu_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
+                                <a asp-action="Index" asp-controller="Menu">
+                                    <img src="~/images/icons/menu-icon.png" alt="" />
+                                    <span class="sidebar_desc">Menu</span>
+                                </a>
+                            </li>
+                        }
+                        @if(permissions.Contains("TableAndSection_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
+                                <a asp-action="Index" asp-controller="TableAndSection">
+                                    <img src="~/images/icons/square-fill.svg" alt="" />
+                                    <span class="sidebar_desc">Table and Section</span>
+                                </a>
+                            </li>
+                        }
+                        @if(permissions.Contains("TaxAndFee_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
+                                <a href="">
+                                    <img src="~/images/icons/cash-coin.svg" alt="" />
+                                    <span class="sidebar_desc">Taxes and Fees</span>
+                                </a>
+                            </li>
+                        }
+                        @if(permissions.Contains("Order_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
+                                <a href="">
+                                    <img src="~/images/icons/clipboard-check.svg" alt="" />
+                                    <span class="sidebar_desc">Order</span>
+                                </a>
+                            </li>
+                        }
+                        @if(permissions.Contains("Customers_View"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
+                                <a href="">
+                                    <img src="~/images/icons/person-rolodex.svg" alt="" />
+                                    <span class="sidebar_desc">Customers</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </nav>
             </div>

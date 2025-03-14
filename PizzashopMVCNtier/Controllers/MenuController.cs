@@ -126,7 +126,7 @@ public class MenuController : Controller
 
     #region Add/Edit Items
     [HttpGet]
-    [PermissionAuthorize("Menu_AddEdit")]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveItem(long id)
     {
         //for the Add Item Model
@@ -260,7 +260,7 @@ public class MenuController : Controller
 
     #region Add/Edit Modifier Group
     [HttpGet]
-    [PermissionAuthorize("Menu_AddEdit")]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifierGroup(long id)
     {
         //for the Add Item Model
@@ -356,7 +356,7 @@ public class MenuController : Controller
     
     #region Add/Edit Modifer Item
     [HttpGet]
-    [PermissionAuthorize("Menu_AddEdit")]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifier(long id)
     {
         //for the Add Item Model
