@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PizzashopMVCNtier.Controllers;
 
+[Authorize]
 public class MenuController : Controller
 {
     private readonly ICategoryItemService _categoryItemService;
@@ -242,9 +243,9 @@ public class MenuController : Controller
     // -------------------------------------------------------------------- Add Item Modifier Select Group ------------------------------------------------------------------//
     #region Modifier Item For Add Item
     [HttpGet]
-    public async Task<IActionResult> GetModifierItemById(long modifierId)
+    public async Task<IActionResult> GetModifierItemById(long modifierGroupId)
     {
-        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierId));
+        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierGroupId));
     }
     #endregion
 
@@ -297,12 +298,12 @@ public class MenuController : Controller
         //For Adding New Category
         if (model.ModifierId == 0)
         {
-            result = await _modifiersService.AddModifier(model, userId);
+            result = await _modifiersService.AddModifierGroup(model, userId);
         }
         //For Editing Category
         else
         {
-            result = await _modifiersService.EditModifier(model, userId);
+            result = await _modifiersService.EditModifierGroup(model, userId);
             isCreated = false;
         }
         // Checking for Add or Update
@@ -328,7 +329,7 @@ public class MenuController : Controller
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
 
-        bool result = await _modifiersService.DeleteModifier(id, userName);
+        bool result = await _modifiersService.DeleteModifierGroup(id, userName);
         if (result)
         {
             return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier Group") });

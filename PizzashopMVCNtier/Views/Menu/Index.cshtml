@@ -527,7 +527,7 @@
       $.ajax({
         url: '@Url.Action("GetModifierItemById", "Menu")',
         type: "GET",
-        data: { modifierId: modifierGroupId },
+        data: { modifierGroupId: modifierGroupId },
         success: function (data) {
           $("#mgItemList").append(data);
         },
