@@ -19,7 +19,7 @@ public class RolePermissionsRepository : IRolePermissionsRepository
     -------------------------------------------------------------------------------------------------------*/
     public List<PermissionsViewModel> GetRoleAndPermissions(long roleId)
     {
-        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
+        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).OrderBy(rp=>rp.Id).ToList();
         List<PermissionsViewModel> model = new List<PermissionsViewModel>();
         
         foreach(Rolesandpermission perm in permissions){

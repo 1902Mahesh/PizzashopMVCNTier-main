@@ -170,6 +170,9 @@
             data:{roleId : roleId, model:permissionList},
             success: function (roles) {
               toastr.success("Permissions Updated Succesfully");
+              setTimeout(function () {
+                location.reload();
+              },2000)
             },
             error: function () {
               toastr.error("Error updating Permissions");
@@ -177,51 +180,40 @@
         });
     });    
   </script>
-  @* <script>
-    $(document).ready(function() {
-    // Disable all switches initially
-    $('.view_switch, .add_switch, .delete_switch').prop("disabled", true);
+  <script>
+    $(document).ready(function(){
+      //Diasble MaxAllowed Switches initially
+      $('.view_switch, .add_switch, .delete_switch').prop('disabled', true);
 
-    // Function to toggle switches based on the main permission checkbox
-    $('.form-check-input').on("change", function() {
+      
+      //function to toggle-password diable Property based on check box
+      $('.permission-check-box').on("change", function(){
         var id = $(this).data("id");
+        var checked = $(this).prop("checked");
 
-        if ($(this).prop("checked")) {
-            // Enable the View switch
+        if(checked){
+          // Enable the View switch
             $('.view_switch[data-id="' + id + '"]').prop("disabled", false);
-        } else {
-            // Disable and uncheck all switches
-            $('.view_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
-            $('.add_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
-            $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
+            var view = $('.view_switch[data-id="' + id + '"]').prop("checked");
+            $('.add_switch[data-id="' + id + '"]').prop("disabled", !view);
+            var add = $('.add_switch[data-id="' + id + '"]').prop("checked");
+            $('.delete_switch[data-id="' + id + '"]').prop("disabled", !add);
         }
-    });
+        else{
+          // Disable all switches
+          $('.view_switch[data-id="' + id + '"]').prop("disabled", true);
+          $('.add_switch[data-id="' + id + '"]').prop("disabled", true);
+          $('.delete_switch[data-id="' + id + '"]').prop("disabled", true);
+        }
+      })
 
-    // View switch behavior
-    $('.view_switch').on("change", function() {
-        var id = $(this).data("id");
-        var viewChecked = $(this).prop("checked");
+      // Master checkbox functionality
+      $('#selectAll').on("change", function() {
+          var isChecked = $(this).prop("checked");
 
-        $('.add_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", !viewChecked);
-        $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", true);
-    });
-
-    // Add/Edit switch behavior
-    $('.add_switch').on("change", function() {
-        var id = $(this).data("id");
-        var addChecked = $(this).prop("checked");
-
-        $('.delete_switch[data-id="' + id + '"]').prop("checked", false).prop("disabled", !addChecked);
-    });
-
-    // Master checkbox functionality
-    $('#selectAll').on("change", function() {
-        var isChecked = $(this).prop("checked");
-
-        // Toggle all checkboxes
-        $('.form-check-input').not(this).prop("checked", isChecked).trigger("change");
-    });
-});
-
-  </script> *@
+          // Toggle all checkboxes
+          $('.permission-check-box').not(this).prop("checked", isChecked).trigger("change");
+      });
+    })
+  </script>
 }

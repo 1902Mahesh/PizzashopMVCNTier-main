@@ -39,7 +39,7 @@ public class RolePermissionController :Controller
 
     #region  Permissions Get and Post
     [HttpGet]
-    [PermissionAuthorize("RoleAndPermission_View")]
+    [PermissionAuthorize("RoleAndPermission_AddEdit")]
     public async Task<IActionResult> Permission(long id)
     {
         RolePermissionViewModel model = _rolePermissionService.GetRolePermissions(id);
