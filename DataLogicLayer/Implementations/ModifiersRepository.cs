@@ -21,7 +21,7 @@ public class ModifiersRepository : IModifiersRepository
     #region Get Modifier Group
     public IEnumerable<Modifiergroup> GetAllModifierGroup()
     {
-        return _context.Modifiergroups.Where(m => !m.Isdeleted).ToList();
+        return _context.Modifiergroups.Where(m => !m.Isdeleted).OrderBy(m => m.Id).ToList();
     }
 
     public async Task<ModifierGroupViewModel> GetModifierGroupByIdAsync(long modifierGroupId)
@@ -466,7 +466,7 @@ public class ModifiersRepository : IModifiersRepository
             {
                 foreach (var deleteItem in toBeRemoved)
                 {
-                    await DeleteExistingModifiers(deleteItem, userId);
+                    await DeleteExistingModifiers(modifierGroupId,deleteItem, userId);
                 }
             }
 
@@ -503,12 +503,12 @@ public class ModifiersRepository : IModifiersRepository
     #endregion
 
     #region Delete Modifier Items In Mapping Table
-    public async Task<bool> DeleteExistingModifiers(long id, long userId)
+    public async Task<bool> DeleteExistingModifiers(long modifierGroupId,long id, long userId)
     {
         try
         {
             Modifiergroupitemmap? existingOne = await _context.Modifiergroupitemmaps
-                .Where(mi => mi.ModifierItemId == id && !mi.Isdeleted)
+                .Where(mi => mi.ModifierItemId == id && mi.ModifierGroupId == modifierGroupId && !mi.Isdeleted)
                 .FirstOrDefaultAsync();
 
             if (existingOne == null)
