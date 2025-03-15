@@ -20,10 +20,12 @@
                             <option value="@modifierGroup.ModifierId">@modifierGroup.Name</option>
                         }
                     </select>
+                    <span class="text-danger" asp-validation-for="ModifierGroupId"></span>
             </div>
             <div class="form-floating col-md-6">
                 <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Enter name" required>
                 <label class="form-label txt-color">Name*</label>
+                <span class="text-danger" asp-validation-for="Name"></span>
             </div>
         </div>
 
@@ -33,11 +35,13 @@
             <div class="form-floating col-md-4 mb-3">
                 <input asp-for="@Model.Rate" type="number" class="form-control" required>
                 <label class="form-label">Rate*</label>
+                <span class="text-danger" asp-validation-for="Rate"></span>
             </div>
 
             <div class="form-floating col-md-4 mb-3">
                 <input asp-for="@Model.Quantity" type="number" class="form-control">
                 <label class="form-label">Quantity*</label>
+                <span class="text-danger" asp-validation-for="Quantity"></span>
             </div>
 
             <!-- Unit Selection -->
@@ -50,6 +54,8 @@
                     }
                 </select>
                 <label class="form-label">Unit*</label>
+                <span class="text-danger" asp-validation-for="UnitId"></span>
+
             </div>
         </div>
 

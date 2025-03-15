@@ -542,7 +542,7 @@
                 alert("Error saving item.");
             }
         });
-    });
+      });
   </script>
 
 
@@ -711,8 +711,6 @@
     });
   </script>
 
-
-
   <!-- ----------------------------------------------------------- Modifier Items according to modifier_active group Partial View AJAX call Javascript--------------------------------------------------------->
   <script>
     function ModifierPaginationAjax(currentPage) {
@@ -824,7 +822,8 @@
           selectedExistingModifiers = [];
           $('.existModifiers').each(function () {
             var id = $(this).data("mgitemid");
-            selectedExistingModifiers.push({ ModifierItemId: id });
+            var name = $(this).data("mgitemname");
+            selectedExistingModifiers.push({ ModifierItemId: id,Name:name });
           });
         },
         error: function () {
@@ -834,37 +833,27 @@
     }
 
     $(document).on("click", "#modifierGroupAddModalBtn", function () {
+      $("#addModifierGroupContent").empty();
       loadModifierGroup(0);
     })
 
     $(document).on("click", ".editModifierGroupBtn", function () {
+      $("#addModifierGroupContent").empty();
       loadModifierGroup($(this).data("mgid"));
     })
+
+    
 
 
     function AppendModifiers(id, name) {
       $('.existingModifierList').append(`
-                        <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="${id}" style="border: 1px solid grey; border-radius: 15px;">
+                        <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="${id}" data-mgitemname=${name} style="border: 1px solid grey; border-radius: 15px;">
                             ${name}
                             <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
                         </span>
                       `);
     }
 
-    @* $(document).on("click", "#saveExitingMgBtn", function () {
-      selectedExistingModifiers = [];
-
-        $(".modifierItemCheckBox:checked").each(function () {
-          var id = $(this).data("mg-item-id");
-          var name = $(this).data("mg-item-name");
-
-          if (selectedExistingModifiers.indexOf(Number(id)) == -1) {
-            selectedExistingModifiers.push({ ModifierItemId: Number(id) });
-            AppendModifiers(id, name);
-          }
-
-        })
-    }) *@
 
     function checkBoxModifierItemInModal() {
       $.each(selectedExistingModifiers, function (index, id) {
@@ -876,7 +865,7 @@
       let id = $(this).data("mg-item-id");
       var name = $(this).data("mg-item-name");
       if (!selectedExistingModifiers.some(e => e.ModifierItemId===Number(id))) {
-        selectedExistingModifiers.push({ ModifierItemId: Number(id) });
+        selectedExistingModifiers.push({ ModifierItemId: Number(id),Name:name });
         AppendModifiers(id, name);
       }
       else {
@@ -887,10 +876,39 @@
       }
     })
 
-    $(document).on("click", "#submitMgBtn", function () {
+    @* $(document).on("click", "#submitMgBtn", function () {
       $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
       $("#submitModifierGroupForm").off('submit').submit();
-    })
+    }) *@
+
+    $(document).on("click", "#submitMgBtn", function (e) {
+        e.preventDefault(); // Prevent default form submission
+        $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
+
+        var form = $("#submitModifierGroupForm");
+        var formData = new FormData(form[0]);
+
+        $.ajax({
+            url: form.attr("action"),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $('#modifierModal').modal('hide');
+                    location.reload(); // Refresh page after success
+                } else {
+                    // Keep modal open and show validation errors
+                    $("#addModifierGroupContent").html(response);
+                    $('#modifierModal').modal('show'); // Ensure modal remains visible
+                }
+            },
+            error: function () {
+                alert("Error saving item.");
+            }
+        });
+      });
 
 
     // Handle Delete Modifier Group Confirmation Click
@@ -952,12 +970,47 @@
 
 
     $(document).on("click", "#newModifierBtn", function () {
+      $("#addModifierGroupContent").empty();
       loadModifierItemModal(0);
     });
 
     $(document).on("click", '.modifierEditBtn', function () {
+      $("#addModifierGroupContent").empty();
       loadModifierItemModal($(this).data("mg-item-id"));
     });
+
+    $(document).on("click", "#confirmModifierBtn", function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        var form = $("#modifierItemForm");
+        var formData = new FormData(form[0]);
+
+        $.ajax({
+            url: form.attr("action"),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $('#addModifierItem').modal('hide');
+                    $("#profile-tab").click();
+                    toastr.success(response.message);
+                } else {
+                    if(response.errorMessage){
+                      toastr.error(response.errorMessage);
+                    }
+                    else{
+                      $("#addModifierModalContent").html(response);
+                      $('#addModifierItem').modal('show'); // Ensure modal remains open
+                    }
+                }
+            },
+            error: function () {
+                alert("Error saving item.");
+            }
+        });
+      });
   </script>
 
   <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->

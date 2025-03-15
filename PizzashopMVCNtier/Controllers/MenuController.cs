@@ -291,7 +291,8 @@ public class MenuController : Controller
         }
         if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "Menu");
+            model.ModifierItemList = JsonSerializer.Deserialize<List<ModifierItemViewModel>>(modifierItemList);
+            return PartialView("_modifierGroupAdd", model);
         }
 
         string result = "";
@@ -313,13 +314,14 @@ public class MenuController : Controller
         {
             TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
             TempData["NotificationType"] = NotificationType.Success.ToString();
+            return Json(new { success = true });
         }
         else
         {
             TempData["NotificationMessage"] = result;
             TempData["NotificationType"] = NotificationType.Error.ToString();
+            return PartialView("_modifierGroupAdd", model);
         }
-        return RedirectToAction("Index", "Menu");
     }
     #endregion
 
@@ -386,7 +388,9 @@ public class MenuController : Controller
         long userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
         if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "Menu");
+            model.UnitList = _categoryItemService.GetUnits();
+            model.ModifierGroupList = _modifiersService.GetAllModifierGroup();
+            return PartialView("_addModifierModal", model);   
         }
 
         string result = "";
@@ -406,15 +410,13 @@ public class MenuController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier");
+            return Json(new { success = true, message = message});
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+           return Json(new { success = false, errorMessage = result });
         }
-        return RedirectToAction("Index", "Menu");
     }
     #endregion
 

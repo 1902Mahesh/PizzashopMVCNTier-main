@@ -9,6 +9,7 @@
         <input type="hidden" id="existingItemList" name="ModifierItemList">
         <div class="mb-3 w-100">
             <input type="text" class="form-control" asp-for="@Model.Name" placeholder="Name">
+            <span class="text-danger" asp-validation-for="Name"></span>
         </div>
         <div class="mb-3 w-100">
             <textarea asp-for="@Model.Description" type="text" class="form-control"
@@ -22,7 +23,7 @@
     <div class="ps-3 pt-2 existingModifierList" >
         @foreach(var item in @Model.ModifierItemList)
         {
-            <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="@item.ModifierItemId" style="border: 1px solid grey; border-radius: 15px;">
+            <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="@item.ModifierItemId" data-mgitemname=@item.Name style="border: 1px solid grey; border-radius: 15px;">
                 @item.Name
                 <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="@item.ModifierItemId"></button>
             </span>
