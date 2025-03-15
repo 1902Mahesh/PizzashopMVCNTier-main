@@ -44,6 +44,8 @@
             </button>
           </div>
 
+          <!------------------------------------------------- Category List --------------------------------------------------------------------- -->
+
           <!-- Category List Starts -->
           <div class="category_list">
             <ul class="p-0" id="category_listUl">
@@ -70,6 +72,8 @@
           </div>
         </div>
 
+        <!------------------------------------------------- Items List --------------------------------------------------------------------- -->
+        
         <!-- Items Section -->
         <div class="w-100 table-responsive">
           <p class="heading_color fs-4 fw-bold ms-2">Items</p>
@@ -92,7 +96,7 @@
           </div>
 
 
-          <!-- Table For Items Data -->
+          <!---------------------------------------------------- Table For Items Data -------------------------------------------------------------->
           <div id="tableContent">
           </div>
 
@@ -101,7 +105,7 @@
 
     </div>
 
-    <!-- #region Modifier Tab-->
+    <!-- ---------------------------------------------------------------------- Modifier Tab--------------------------------------------------->
     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
     </div>
     <!-- #endregion -->
@@ -109,7 +113,7 @@
 </div>
 
 
-<!-- Save Category Modal -->
+<!--------------------------------------------------------------------- Save Category Modal ---------------------------------------------------->
 <div class="modal fade" tabindex="-1" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -143,7 +147,7 @@
 
 
 
-<!-- Delete Categoty Modal -->
+<!----------------------------------------------------------------------- Delete Categoty Modal -------------------------------------------------->
 <div class="modal fade" tabindex="-1" id="deleteCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -170,14 +174,14 @@
 
 
 
-<!-- Add Item  Modal -->
+<!------------------------------------------------------------------------- Add Item  Modal ---------------------------------------------------------->
 <div class="modal fade" tabindex="-1" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" id="addItemModalContent"></div>
   </div>
 </div>
 
-<!-- Delete Item Modal -->
+<!------------------------------------------------------------------------- Delete Item Modal ---------------------------------------------------->
 <div class="modal fade" tabindex="-1" id="deleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -202,7 +206,7 @@
 </div>
 
 
-<!-- Mass Delete Item Modal -->
+<!--------------------------------------------------------------------------------- Mass Delete Item Modal ------------------------------------------------>
 <div class="modal fade" tabindex="-1" id="massDeleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -226,7 +230,7 @@
   </div>
 </div>
 
-<!-- Add Modifier Group Modal -->
+<!---------------------------------------------------------------------------- Add Modifier Group Modal ------------------------------------>
 <div class="modal fade" tabindex="-1" id="modifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content" id="addModifierGroupContent">
@@ -236,7 +240,7 @@
 </div>
 
 
-<!-- Add Existing  Modifier Group Modal -->
+<!------------------------------------------------------------------------- Add Existing  Modifier Group Modal -------------------------------->
 <div class="modal fade" tabindex="-1" id="existingModifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -272,7 +276,7 @@
 </div>
 
 
-<!-- Delete Modifier Group Modal -->
+<!------------------------------------------------------------------------------------ Delete Modifier Group Modal --------------------------->
 <div class="modal fade" tabindex="-1" id="deleteModifierGroupModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -296,7 +300,7 @@
   </div>
 </div>
 
-<!-- Add Modifier Item Modal -->
+<!--------------------------------------------------------------------------------------- Add Modifier Item Modal ------------------------------>
 <div class="modal fade" tabindex="-1" id="addModifierItem" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" id="addModifierModalContent">
@@ -304,7 +308,7 @@
   </div>
 </div>
 
-<!-- Delete Modifier Item Modal -->
+<!----------------------------------------------------------------------------------- Delete Modifier Item Modal -------------------------------->
 <div class="modal fade" tabindex="-1" id="deleteModifierModal" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -333,7 +337,7 @@
 
 @section Scripts {
 
-  <!-- Category selection Javascript-->
+  <!-- ----------------------------------------------------------- Category Selection Javascript--------------------------------------------------------->
   <script>
     $(document).ready(function () {
       var categoryId = $('#category_listUl li:first>div>a').data("id");
@@ -351,7 +355,7 @@
     })
   </script>
 
-  <!-- Items  Display With Pagination Javascript-->
+    <!-- ----------------------------------------------------------- Load Items For Menu Page Javascript--------------------------------------------------------->
   <script>
     function paginationAjax(currentPage) {
       let pageSize = $('#selectPageSize').val();
@@ -382,7 +386,7 @@
     });
   </script>
 
-  <!-- Category Modal Validationns -->
+    <!-- ----------------------------------------------------------- Category Modal Validation Javascript--------------------------------------------------------->
   <script>
     $("#CategorySaveForm").submit(function () {
       event.preventDefault();
@@ -417,7 +421,7 @@
 
   </script>
 
-  <!-- Edit and Delete button visibility on hover  -->
+  <!-- ----------------------------------------------------------- Edit/Delete button visibility on Hover Javascript--------------------------------------------------------->
   <script>
     $('.list-items').mouseover(function () {
       $(this).children("div.editDeleteBtn").css("visibility", "visible");
@@ -478,7 +482,6 @@
   </script>
 
   <!-- ----------------------------------------------------------- Load Add/Edit Item Modal  Javascript--------------------------------------------------------->
-
   <script>
     function loadItemModal(id) {
 
@@ -519,7 +522,6 @@
   </script>
 
   <!-- ----------------------------------------------------------- Select Modifier in Add edit Item modal Javascript--------------------------------------------------------->
-
   <script>
     let selectedModifiers = [];
 
@@ -559,9 +561,7 @@
     });
   </script>
 
-
   <!-- ----------------------------------------------------------- Handle Delete Item in Items Tab Javascript--------------------------------------------------------->
-
   <script>
     $(document).on("click", ".deleteItemBtn", function () {
       itemId = $(this).data("id");
@@ -592,7 +592,6 @@
   </script>
 
   <!-- ----------------------------------------------------------- Mass delete Diasble Property Javascript--------------------------------------------------------->
-
   <script>
     $(document).ready(function () {
       $("#MassdeleteItemBtn").prop("disabled", true);
@@ -631,9 +630,7 @@
 
   </script>
 
-
   <!-- ----------------------------------------------------------- Handle Mass Delete Item Javascript--------------------------------------------------------->
-
   <script>
 
     $(document).on("click", "#MassdeleteItemBtn", function () {
@@ -672,10 +669,7 @@
     })
   </script>
 
-
-
   <!-- ----------------------------------------------------------- Modifiers Tab Partial View AJAX call Javascript--------------------------------------------------------->
-
   <script>
     $('#profile-tab').on("click", function () {
       $.ajax({
@@ -695,7 +689,6 @@
 
 
   <!-- ----------------------------------------------------------- Modifier Items according to modifier_active group Partial View AJAX call Javascript--------------------------------------------------------->
-
   <script>
     function ModifierPaginationAjax(currentPage) {
       let pageSize = $('#modifierPageSize').val();
@@ -725,7 +718,6 @@
     });
   </script>
 
-
   <!-- ----------------------------------------------------------- Load first Modifier Item and Highlighted Class Javascript--------------------------------------------------------->
   <script>
     function InitializeModifier() {
@@ -752,11 +744,7 @@
     })
   </script>
 
-
-
-
   <!-- ----------------------------------------------------------- Load Existing Modifier Item In Modifier Modal Javascript--------------------------------------------------------->
-
   <script>
     function LoadModifierItem(currentPage) {
       let pageSize = $('#modifierItemPageSize').val();
@@ -796,8 +784,8 @@
     });
 
   </script>
-  <!-- ----------------------------------------------------------- Modifier Group Add Edit Javascript--------------------------------------------------------->
 
+  <!-- ----------------------------------------------------------- Modifier Group Add Edit Javascript--------------------------------------------------------->
   <script>
     var selectedExistingModifiers = [];
     function loadModifierGroup(id) {
@@ -920,7 +908,6 @@
   </script>
 
   <!-- ----------------------------------------------------------- Modifier Items Add Edit Javascript--------------------------------------------------------->
-
   <script>
     function loadModifierItemModal(id) {
       $.ajax({
@@ -949,7 +936,6 @@
   </script>
 
   <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->
-
   <script>
     $(document).on("click", ".modifierDeleteBtn", function () {
       modifierId = $(this).data("mg-item-id");
