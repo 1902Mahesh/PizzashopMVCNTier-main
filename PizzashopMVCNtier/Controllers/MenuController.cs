@@ -187,15 +187,12 @@ public class MenuController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Item");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
-            return Json(new { success = true });
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Item");
+            return Json(new { success = true, message = message });
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
-            return PartialView("_addItemModalPartialView", model);
+            return Json(new { success = false, errorMessage = result});
         }
     }
     #endregion
@@ -312,15 +309,12 @@ public class MenuController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
-            return Json(new { success = true });
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
+            return Json(new { success = true , message = message});
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
-            return PartialView("_modifierGroupAdd", model);
+            return Json(new { success = false, errorMessage = result});
         }
     }
     #endregion

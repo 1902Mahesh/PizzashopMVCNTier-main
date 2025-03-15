@@ -531,20 +531,27 @@
             success: function (response) {
                 if (response.success) {
                     $('#addItemModal').modal('hide');
-                    location.reload(); // Refresh page after success
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                      location.reload(); // Refresh menu items
+                    }, 3000);
                 } else {
-                    // Keep modal open and show validation errors
-                    $("#addItemModalContent").html(response);
-                    $('#addItemModal').modal('show'); // Ensure modal remains visible
+                    if(response.errorMessage){
+                      toastr.error(response.errorMessage);
+                    }
+                    else{
+                      // Keep modal open and show validation errors
+                      $("#addItemModalContent").html(response);
+                      $('#addItemModal').modal('show'); // Ensure modal remains visible
+                    }
                 }
             },
             error: function () {
-                alert("Error saving item.");
+                console.log("Error saving item.");
             }
         });
       });
   </script>
-
 
   <!-- ----------------------------------------------------------- Select Modifier in Add edit Item modal Javascript--------------------------------------------------------->
   <script>
@@ -897,11 +904,17 @@
             success: function (response) {
                 if (response.success) {
                     $('#modifierModal').modal('hide');
-                    location.reload(); // Refresh page after success
+                    $("#profile-tab").click();
+                    toastr.success(response.message);
                 } else {
-                    // Keep modal open and show validation errors
-                    $("#addModifierGroupContent").html(response);
-                    $('#modifierModal').modal('show'); // Ensure modal remains visible
+                    if(response.errorMessage){
+                      toastr.error(response.errorMessage);
+                    }
+                    else{
+                      // Keep modal open and show validation errors
+                      $("#addModifierGroupContent").html(response);
+                      $('#modifierModal').modal('show'); // Ensure modal remains visible
+                    }
                 }
             },
             error: function () {
@@ -923,12 +936,10 @@
             success: function (response) {
               if (response.success) {
                 $("#deleteModifierGroupModal").modal("hide");
+                $("#profile-tab").click();
                 toastr.success(response.message);
-                setTimeout(function () {
-                  location.reload(); // Refresh Category list
-                }, 3000);
               } else {
-                toastr.error(response.message);
+                toastr.error(response.errorMessage);
               }
             },
             error: function (xhr, status, error) {
@@ -1026,10 +1037,8 @@
             success: function (response) {
               if (response.success) {
                 $("#deleteModifierModal").modal("hide");
+                $("#profile-tab").click();
                 toastr.success(response.message);
-                setTimeout(function () {
-                  location.reload(); // Refresh Category list
-                }, 3000);
               } else {
                 toastr.error(response.message);
               }

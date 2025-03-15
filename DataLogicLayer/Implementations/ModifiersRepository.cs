@@ -197,7 +197,7 @@ public class ModifiersRepository : IModifiersRepository
     #region DELETE : Modifier Group
     public async Task<bool> DeleteModifierGroupAsync(long modifierGroupId, long userId)
     {
-        Modifiergroup? modifiergroup = _context.Modifiergroups.Where(c => c.Id != modifierGroupId && !c.Isdeleted).FirstOrDefault();
+        Modifiergroup? modifiergroup = _context.Modifiergroups.Where(mg => mg.Id == modifierGroupId).FirstOrDefault();
         List<Modifiergroupitemmap> modifierGroupItems = _context.Modifiergroupitemmaps.Where(i => i.ModifierGroupId == modifierGroupId).ToList();
         if (modifiergroup == null)
         {
