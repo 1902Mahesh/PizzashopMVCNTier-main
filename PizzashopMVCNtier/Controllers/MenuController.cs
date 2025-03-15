@@ -162,12 +162,13 @@ public class MenuController : Controller
 
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = NotificationMessages.InvalidModelState;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            model.CategoryList = _categoryItemService.GetCategories();
+            model.ItemTypeList = _categoryItemService.GetItemtypes();
+            model.UnitList = _categoryItemService.GetUnits();
+            model.ModifierGropList = _modifiersService.GetAllModifierGroup();
+            model.ItemModifierList = await _modifiersService.GetAllModifierItemById(model.ItemId);
             return PartialView("_addItemModalPartialView", model);
         }
-
-
 
         string result = "";
         bool isCreated = true;
@@ -188,13 +189,14 @@ public class MenuController : Controller
         {
             TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Item");
             TempData["NotificationType"] = NotificationType.Success.ToString();
+            return Json(new { success = true });
         }
         else
         {
             TempData["NotificationMessage"] = result;
             TempData["NotificationType"] = NotificationType.Error.ToString();
+            return PartialView("_addItemModalPartialView", model);
         }
-        return RedirectToAction("Index");
     }
     #endregion
 

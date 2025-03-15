@@ -14,49 +14,55 @@
                 <!-- Category & Name -->
                 <div class=" form-floating col-lg-6 col-12 mb-3">
                     <select asp-for="@Model.CategoryId" class="form-select" id="categorySelect">
-                        <option value="">select active Category</option>
+                        <option value="0">select active Category</option>
                         @foreach (var category in Model.CategoryList)
                         {
                             <option value="@category.Id">@category.CategoryName</option>
                         }
                     </select>
                     <label class="form-label">Category*</label>
+                     <span class="text-danger" asp-validation-for="CategoryId"></span>
                 </div>
                 <div class="form-floating col-lg-6 col-12 mb-3">
                     <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Enter name" required>
                     <label class="form-label txt-color">Name*</label>
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
 
                 <!-- Item Type & Rate -->
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                    <select asp-for="@Model.ItemTypeId" class="form-select" id="categorySelect">
-                        <option value="">Select a Type</option>
+                    <select asp-for="@Model.ItemTypeId" class="form-select" id="itemSelect">
+                        <option value="0">Select a Type</option>
                         @foreach (var itemType in Model.ItemTypeList)
                         {
                             <option value="@itemType.Id">@itemType.Name</option>
                         }
                     </select>
                     <label class="form-label">Item Type*</label>
+                    <span class="text-danger" asp-validation-for="ItemTypeId"></span>
                 </div>
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
                     <input asp-for="@Model.Rate" type="number" class="form-control" required>
                     <label class="form-label">Rate*</label>
+                    <span class="text-danger" asp-validation-for="Rate"></span>
                 </div>
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
                     <input asp-for="@Model.Quantity" type="number" class="form-control">
                     <label class="form-label">Quantity*</label>
+                    <span class="text-danger" asp-validation-for="Quantity"></span>
                 </div>
 
                 <!-- Unit Selection -->
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                    <select asp-for="@Model.UnitId" class="form-select" id="categorySelect">
-                        <option value="">Select a Unit</option>
+                    <select asp-for="@Model.UnitId" class="form-select" id="unitSelect">
+                        <option value="0">Select a Unit</option>
                         @foreach (var unit in Model.UnitList)
                         {
                             <option value="@unit.UnitId">@unit.Name</option>
                         }
                     </select>
                     <label class="form-label">Unit*</label>
+                    <span class="text-danger" asp-validation-for="UnitId"></span>
                 </div>
 
                 <!-- Toggle Switches -->
@@ -77,6 +83,7 @@
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
                     <input asp-for="@Model.TaxPercentage" type="number" class="form-control">
                     <label class="form-label">Tax Percentage</label>
+                    <span class="text-danger" asp-validation-for="TaxPercentage"></span>
                 </div>
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
                     <input asp-for="@Model.ShortCode" type="text" class="form-control">
@@ -172,6 +179,9 @@
 </form>
 
 
+
+<!-- Ensure validation scripts are loaded -->
+@await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
         var selectedModifiersItem = [];

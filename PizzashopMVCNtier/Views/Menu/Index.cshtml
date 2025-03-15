@@ -336,7 +336,6 @@
 
 
 @section Scripts {
-
   <!-- ----------------------------------------------------------- Category Selection Javascript--------------------------------------------------------->
   <script>
     $(document).ready(function () {
@@ -514,12 +513,38 @@
     $(document).on("click", ".editItemBtn", function () {
       loadItemModal($(this).data("id"));
     })
+    
+    // --------------------------------------------------------------------------------------- Add Item Form  Submission----------------------
+     $(document).on("click", "#submitAddItemForm", function (e) {
+        e.preventDefault(); // Prevent default form submission
+        SubmitAddItem(); // Handle modifier selection if needed
 
-    $(document).on("click", "#submitAddItemForm", function () {
-      SubmitAddItem();
-      $("#menuItemForm").off('submit').submit();
-    })
+        var form = $("#menuItemForm");
+        var formData = new FormData(form[0]);
+
+        $.ajax({
+            url: form.attr("action"),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $('#addItemModal').modal('hide');
+                    location.reload(); // Refresh page after success
+                } else {
+                    // Keep modal open and show validation errors
+                    $("#addItemModalContent").html(response);
+                    $('#addItemModal').modal('show'); // Ensure modal remains visible
+                }
+            },
+            error: function () {
+                alert("Error saving item.");
+            }
+        });
+    });
   </script>
+
 
   <!-- ----------------------------------------------------------- Select Modifier in Add edit Item modal Javascript--------------------------------------------------------->
   <script>
