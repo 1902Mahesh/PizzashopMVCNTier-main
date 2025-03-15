@@ -51,7 +51,7 @@
                         }
                 </td>
                 <td>
-                    <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("EditUser", "User")?id=@user.UserId">
+                    <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("SaveUser", "User")?id=@user.UserId">
                         <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
                     @if(User.IsInRole("SuperAdmin"))

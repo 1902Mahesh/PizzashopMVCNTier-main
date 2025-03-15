@@ -187,7 +187,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<(string message, bool result)> EditUserAsync(EditUserViewModel model, User user, long adminId)
+    public async Task<(string message, bool result)> EditUserAsync(AddUserViewModel model, User user, long adminId)
     {
         try
         {

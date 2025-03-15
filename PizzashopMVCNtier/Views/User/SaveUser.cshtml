@@ -1,0 +1,278 @@
+@model DataLogicLayer.ViewModels.AddUserViewModel
+@{
+    bool isEdit = @Model?.UserId > 0;
+    if(isEdit){
+        ViewData["Title"] = "Edit Page";
+    }
+    else
+    {
+        ViewData["Title"] = "Add Page";
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="body_content">
+    <!-- Edit User Starts-->
+    <div class="d-flex flex-row justify-content-between user_list_header">
+        <!-- Edit User Header -->
+        <div class="user_header fs-2 fs-lg-1">
+            <span>@((Model?.UserId != null || Model?.UserId > 0) ? "Edit " : "Add New ")User</span>
+        </div>
+        <!-- Back Button -->
+        <a asp-action="Index" asp-controller="User"
+            class="btn back_btn d-flex align-items-center justify-content-center">
+            <img src="~/images/icons/chevron-left.svg" alt="" />
+            Back
+        </a>
+    </div>
+
+    <!-- Edit User Form Starting -->
+    <div class="form_container">
+        <form id="addUserForm" asp-action="SaveUser" asp-controller="User" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="@Model.UserId" id="UserId">
+            <div class="row">
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.FirstName" type="text" class="form-control" id="firstName"
+                        placeholder="John" />
+                    <label for="firstName">First Name</label>
+                    <span class="text-danger" asp-validation-for="FirstName"></span>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.LastName" type="text" class="form-control" id="lastName" placeholder="Doe" />
+                    <label for="lastName">Last Name</label>
+                    <span class="text-danger" asp-validation-for="LastName"></span>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.UserName" type="text" class="form-control" id="username"
+                        placeholder="john123" />
+                    <label for="username">User Name</label>
+                    <span class="text-danger" asp-validation-for="UserName"></span>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <select asp-for="@Model.RoleId" class="form-select" id="roles">
+                        <option value="">Select Role</option>
+                        @foreach (var role in Model.Roles)
+                        {
+                            <option value="@role.RoleId">@role.Rolename</option>
+                        }
+                    </select>
+                    <label for="role">Role</label>
+                    <span class="text-danger" asp-validation-for="RoleId"></span>
+                </div>
+                <div class="form-floating col-md-6 mb-3">
+                    <input asp-for="@Model.Email" type="email" class="form-control" id="email"
+                        placeholder="john123@gmail.com" />
+                    <label for="email">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+                @if(Model.UserId == null)
+                {
+                    <div class="form-floating col-md-6 mb-3 position-relative">
+                        <input asp-for="@Model.Password" type="password" class="form-control password-field" id="password"
+                            placeholder="password" />
+                        <img src="~/images/icons/eye-close.svg" alt="" width="22px" class="toggle-password placeholder_icon"
+                            style="top: 17px; right: 35px;" />
+                        <label for="password">Password</label>
+                        <span asp-validation-for="Password" class="text-danger"></span> <!-- Error message should appear here -->
+                    </div>
+                }
+                @if(Model.UserId != null)
+                {
+                    <div class="form-floating col-md-6 mb-3 position-relative">
+                    <select class="form-select" aria-label="Default select example" id="status" name="status">
+                        <option value="true" selected="@(Model.Status)">Active</option>
+                        <option value="false" selected="@(!Model.Status)">Inactive</option>
+                    </select>
+                    <label for="role">Status</label>
+                    </div>
+                }
+                <div class="browse_file col-12 mb-3 d-flex justify-content-center">
+                    <input type="file" id="file" class="" asp-for="@Model.ProfileImage" />
+                    <label for="file"
+                        class="browse_file_label d-flex flex-column align-items-center justify-content-center">
+                        <img src="~/images/icons/cloud-arrow-up.svg" alt="" width="20px" />
+                        @if(Model.UserId == null)
+                        {
+                            <p id="browseFile" class="m-0">Browse File</p>
+                        }
+                        else
+                        {
+                            <p id="browseFile" class="m-0">@(!string.IsNullOrEmpty(Model.ImgUrl) ? Model.ImgUrl.Split('_')[1] : "Browse File")</p>
+                        }
+                    </label>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                    <select asp-for="CountryId" class="form-select" id="country">
+                        <option value="">Select Country</option>
+                        @foreach (var country in Model.Countries)
+                        {
+                            <option value="@country.CountryId">@country.Name</option>
+                        }
+                    </select>
+                    <label for="country">Country</label>
+                    <span class="text-danger" asp-validation-for="CountryId"></span>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                    <select asp-for="StateId" class="form-select" id="state">
+                        <option value="">Select State</option>
+                        @foreach (var state in Model.States)
+                        {
+                            <option value="@state.StateId">@state.Name</option>
+                        }
+                    </select>
+                    <label for="satte">State</label>
+                    <span class="text-danger" asp-validation-for="StateId"></span>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                <select asp-for="@Model.CityId" class="form-select" id="city">
+                    <option value="">Select City</option>
+                    @foreach (var city in Model.Cities)
+                    {
+                        <option value="@city.CityId">@city.Name</option>
+                    }
+                </select>
+                <label for="city">City</label>
+                <span class="text-danger" asp-validation-for="CityId"></span>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                    <input asp-for="@Model.Zipcode" type="text" class="form-control" id="zipcode" placeholder="" />
+                    <label for="zipcode">Zipcode</label>
+                    <span class="text-danger" asp-validation-for="Zipcode"></span>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                    <input asp-for="@Model.Address" type="text" class="form-control" id="address" placeholder="" />
+                    <label for="address">Address</label>
+                    <span class="text-danger" asp-validation-for="Address"></span>
+                </div>
+                <div class="form-floating col-md-6 col-lg-4 mb-3">
+                    <input asp-for="@Model.Phone" type="text" class="form-control" id="phone"
+                        placeholder="9879898798" />
+                    <label for="phone">Phone</label>
+                    <span class="text-danger" asp-validation-for="Phone"></span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <button class="btn create_user_btn">@((Model?.UserId != null || Model?.UserId > 0) ? "Update " : "Create ") User</button>
+            <a type="button" asp-action="Index" asp-controller="User" class="btn cancle_btn">Cancel</a>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+<!-- Custom Script -->
+
+    <script>
+        $(document).ready(function () {
+            // Custom jQuery Validation Method
+            $.validator.addMethod("requiredifnewuser", function (value, element) {
+                var userId = $("#UserId").val();
+                var isNewUser = !userId || userId === "0"; // If UserId is empty or 0, it's a new user
+                return !isNewUser || (value && value.length > 0);
+            }, "Password is required for new users.");
+
+            // Unobtrusive Validation Adapter
+            $.validator.unobtrusive.adapters.add("requiredifnewuser", [], function (options) {
+                options.rules["requiredifnewuser"] = true;
+                options.messages["requiredifnewuser"] = options.message;
+            });
+
+            // Function to Reinitialize Validation (Fix for dynamic forms)
+            function reinitializeValidation() {
+                $("#addUserForm").removeData("validator");
+                $("#addUserForm").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse("#addUserForm");
+            }
+
+            // Ensure validation initializes on page load
+            reinitializeValidation();
+
+            // If form fields change, reinitialize validation
+            $(document).on("change", "#addUserForm input, #addUserForm select", function () {
+                reinitializeValidation();
+            });
+
+            // Prevent form submission if validation fails
+            $("#addUserForm").submit(function (e) {
+                if (!$(this).valid()) {
+                    e.preventDefault(); // Stop form submission
+                    $(".field-validation-error, .text-danger, .validation-summary-errors").show();
+                }
+            });
+        });
+
+
+    </script>
+
+
+    <script>
+
+            // Load States when a Country is selected
+            $('#country').change(function () {
+                var countryId = $(this).val();
+                $('#state').empty().append('<option value="" selected>Select State</option>');
+                $('#city').empty().append('<option value="" selected>Select City</option>');
+
+                if (countryId) {
+                    $.ajax({
+                        url: '@Url.Action("GetStatesByCountry", "Dashboard")',
+                        type: 'GET',
+                        data: { countryId: countryId },
+                        success: function (data) {
+                            $.each(data, function (index, item) {
+                                $('#state').append($('<option>', {
+                                    value: item.stateId,
+                                    text: item.name
+                                }));
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Load Cities when a State is selected
+            $('#state').change(function () {
+                var stateId = $(this).val();
+                $('#city').empty().append('<option value="" selected>Select City</option>');
+
+                if (stateId) {
+                    $.ajax({
+                        url: '@Url.Action("GetCitiesByState", "Dashboard")',
+                        type: 'GET',
+                        data: { id: stateId },
+                        success: function (data) {
+                            $.each(data, function (index, item) {
+                                $('#city').append($('<option>', {
+                                    value: item.cityId,
+                                    text: item.name
+                                }));
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#file').change(function () {
+                let file = this.files[0];
+                $('#browseFile').text(file.name);
+            })
+
+
+            // Toggle Password Visibility
+            $(".toggle-password").click(function () {
+                let inputField = $(this).closest(".position-relative").find("input.password-field"); // Find the input field in the same wrapper
+                let inputType = inputField.attr("type");
+
+                if (inputType === "password") {
+                    inputField.attr("type", "text");
+                    $(this).attr("src", "/images/icons/eye.svg"); // Open eye icon
+                } else {
+                    inputField.attr("type", "password");
+                    $(this).attr("src", "/images/icons/eye-close.svg"); // Closed eye icon
+                }
+            });
+    </script>
+
+}

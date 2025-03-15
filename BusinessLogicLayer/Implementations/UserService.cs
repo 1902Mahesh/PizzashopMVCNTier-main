@@ -27,14 +27,14 @@ public class UserService : IUserService
 
 
     #region Get User By Id Service
-    public async Task<EditUserViewModel> GetUserByIdAsync(long id)
+    public async Task<AddUserViewModel> GetUserByIdAsync(long id)
     {
         User user = await _userRepository.GetUserById(id);
         if(user == null){
-            return new EditUserViewModel();
+            return new AddUserViewModel();
         }
 
-        return new EditUserViewModel()
+        return new AddUserViewModel()
         {
             UserId = user.Id,
             FirstName = user.Firstname,
@@ -89,10 +89,10 @@ public class UserService : IUserService
     #endregion
 
     #region Update User Service
-    public async Task<(string message, bool result)> UpdateUserAsync(EditUserViewModel model, string userName)
+    public async Task<(string message, bool result)> UpdateUserAsync(AddUserViewModel model, string userName)
     {
         User admin = await _userRepository.GetUserByUserName(userName);
-        User user = await _userRepository.GetUserById(model.UserId);
+        User user = await _userRepository.GetUserById((long)model.UserId);
         if(user == null){
             return ("user doesn't Exist", false);
         }
