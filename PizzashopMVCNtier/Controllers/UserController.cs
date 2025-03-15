@@ -71,8 +71,6 @@ public class UserController : Controller
 
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
-            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
         (string message, bool result) = await _userService.AddUserAsync(model, userName);

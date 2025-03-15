@@ -29,26 +29,31 @@
                     <input asp-for="@Model.FirstName" type="text" class="form-control" id="firstName"
                         placeholder="John" />
                     <label for="firstName">First Name</label>
+                    <span class="text-danger" asp-validation-for="FirstName"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.LastName" type="text" class="form-control" id="lastName" placeholder="Doe" />
                     <label for="lastName">Last Name</label>
+                    <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.UserName" type="text" class="form-control" id="username"
                         placeholder="john123" />
                     <label for="username">User Name</label>
+                    <span class="text-danger" asp-validation-for="UserName"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <select asp-for="@Model.RoleId" class="form-select" id="role">
                         <option value="" selected>Select Role</option>
                     </select>
                     <label for="role">Role</label>
+                    <span class="text-danger" asp-validation-for="RoleId"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.Email" type="email" class="form-control" id="email"
                         placeholder="john123@gmail.com" />
                     <label for="email">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3 position-relative">
                     <input asp-for="@Model.Password" type="password" class="form-control password-field" id="password"
@@ -56,6 +61,7 @@
                     <img src="~/images/icons/eye-close.svg" alt="" width="22px" class="toggle-password placeholder_icon"
                         style="top: 17px; right: 35px;" />
                     <label for="password">Password</label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
                 </div>
                 <div class="browse_file col-12 mb-3 d-flex justify-content-center">
                     <input type="file" id="file" class="" asp-for="@Model.ProfileImage" />
@@ -70,31 +76,37 @@
                         <option value="" selected>Select Country</option>
                     </select>
                     <label for="country">Country</label>
+                    <span class="text-danger" asp-validation-for="CountryId"></span>
                 </div>
                 <div class="form-floating col-md-6 col-lg-4 mb-3">
                     <select asp-for="@Model.StateId" class="form-select" id="state">
                         <option value="" selected>Select State</option>
                     </select>
                     <label for="state">State</label>
+                    <span class="text-danger" asp-validation-for="StateId"></span>
                 </div>
                 <div class="form-floating col-md-6 col-lg-4 mb-3">
                     <select asp-for="@Model.CityId" class="form-select" id="city">
                         <option value="" selected>Select City</option>
                     </select>
                     <label for="city">City</label>
+                    <span class="text-danger" asp-validation-for="CityId"></span>
                 </div>
                 <div class="form-floating col-md-6 col-lg-4 mb-3">
                     <input asp-for="@Model.Zipcode" type="text" class="form-control" id="zipcode" placeholder="" />
                     <label for="zipcode">Zipcode</label>
+                    <span class="text-danger" asp-validation-for="Zipcode"></span>
                 </div>
                 <div class="form-floating col-md-6 col-lg-4 mb-3">
                     <input asp-for="@Model.Address" type="text" class="form-control" id="address" placeholder="" />
                     <label for="address">Address</label>
+                    <span class="text-danger" asp-validation-for="Address"></span>
                 </div>
                 <div class="form-floating col-md-6 col-lg-4 mb-3">
                     <input asp-for="@Model.Phone" type="text" class="form-control" id="phone"
                         placeholder="9879898798" />
                     <label for="phone">Phone</label>
+                    <span class="text-danger" asp-validation-for="Phone"></span>
                 </div>
             </div>
 
@@ -199,7 +211,7 @@
             /*
                 <------ Client Side Validation For the form submission
             */
-            $('#addUserForm').submit(function (event) {
+            @* $('#addUserForm').submit(function (event) {
                 event.preventDefault();
                 let isValid = true;
 
@@ -312,7 +324,7 @@
             $("#addUserForm input, #addUserForm select, #addUserForm password,#addUserForm email").on("input change", function () {
                 $(this).removeClass("is-invalid");
                 $(this).next(".invalid-feedback").remove();
-            });
+            }); *@
 
             // Toggle Password Visibility
             $(".toggle-password").click(function () {

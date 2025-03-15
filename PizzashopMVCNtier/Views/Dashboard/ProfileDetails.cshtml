@@ -45,20 +45,27 @@
                     <input asp-for="@Model.firstName" type="text" class="form-control" id="firstName"
                         placeholder="John" />
                     <label for="firstName">First Name</label>
+                    <span class="text-danger" asp-validation-for="firstName"></span>
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.lastName" type="text" class="form-control" id="lastName" placeholder="Doe" />
                     <label for="lastName">Last Name</label>
+                    <span class="text-danger" asp-validation-for="lastName"></span>
+
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.userName" type="text" class="form-control" id="username"
                         placeholder="john123" />
                     <label for="username">User Name</label>
+                    <span class="text-danger" asp-validation-for="userName"></span>
+
                 </div>
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.phoneNo" type="text" class="form-control" id="phone"
                         placeholder="9879898798" />
                     <label for="phone">Phone</label>
+                    <span class="text-danger" asp-validation-for="phoneNo"></span>
+
                 </div>
 
                 <!-- Country, State, City Dropdowns -->
@@ -71,6 +78,8 @@
                         }
                     </select>
                     <label for="country">Country</label>
+                    <span class="text-danger" asp-validation-for="CountryId"></span>
+
                 </div>
                 <div class="form-floating col-md-12 col-lg-4 mb-3">
                     <select asp-for="StateId" class="form-select" id="state">
@@ -81,6 +90,7 @@
                         }
                     </select>
                     <label for="state">State</label>
+                    <span class="text-danger" asp-validation-for="StateId"></span>
                 </div>
                 <div class="form-floating col-md-12 col-lg-4 mb-3">
                     <select asp-for="CityId" class="form-select" id="city">
@@ -91,20 +101,23 @@
                         }
                     </select>
                     <label for="city">City</label>
+                    <span class="text-danger" asp-validation-for="CityId"></span>
                 </div>
 
                 <div class="form-floating col-md-12 col-lg-8 mb-3">
                     <input asp-for="@Model.address" type="text" class="form-control" id="address" placeholder="" />
                     <label for="address">Address</label>
+                    <span class="text-danger" asp-validation-for="address"></span>
                 </div>
                 <div class="form-floating col-md-12 col-lg-4 mb-3">
                     <input asp-for="@Model.zipcode" type="text" class="form-control" id="zipcode" placeholder="" />
                     <label for="zipcode">Zipcode</label>
+                    <span class="text-danger" asp-validation-for="zipcode"></span>
                 </div>
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn create_user_btn me-2">Update</button>
+                <button type="submit" class="btn create_user_btn me-2" id="profileDataBtn">Update</button>
                 <a type="button" asp-action="Index" asp-controller="Dashboard" class="btn cancel_btn">Cancel</a>
             </div>
         </form>
@@ -182,87 +195,6 @@
                     });
                 }
             });
-
-
-            $("#profileForm").submit(function (event) {
-            event.preventDefault();
-            let isValid = true;
-
-                // Required Field Validation (Except Image)
-                $("#profileForm input[type='text'], #profileForm select").each(function () {
-                    let inputValue = $(this).val().trim();
-
-                    if (!inputValue || inputValue === "0") {
-                        $(this).addClass("is-invalid"); // Add error styling
-                        $(this).next(".invalid-feedback").remove(); // Remove old message
-                        $(this).after('<div class="invalid-feedback">This field is required</div>');
-                        isValid = false;
-                    } else {
-                        $(this).removeClass("is-invalid");
-                        $(this).next(".invalid-feedback").remove();
-                    }
-                });
-
-                //Phone Number Validation (Must be 10 Digits)
-                let phoneNumber = $("#phone").val().trim();
-                if (phoneNumber === "" || phoneNumber === "0" || !/^\d{10}$/.test(phoneNumber)) {
-                    $("#phone").addClass("is-invalid");
-                    $("#phone").next(".invalid-feedback").remove();
-                    $("#phone").after('<div class="invalid-feedback">Phone number must be exactly 10 digits</div>');
-                    isValid = false;
-                } else {
-                    $("#phone").removeClass("is-invalid");
-                    $("#phone").next(".invalid-feedback").remove();
-                }
-
-                // Zipcode Validation (Must Not Be Empty or 0)
-                let zipcode = $("#zipcode").val().trim();
-                if (zipcode === "" || zipcode === "0") {
-                    $("#zipcode").addClass("is-invalid");
-                    $("#zipcode").next(".invalid-feedback").remove();
-                    $("#zipcode").after('<div class="invalid-feedback">Zipcode is required</div>');
-                    isValid = false;
-                } else {
-                    $("#zipcode").removeClass("is-invalid");
-                    $("#zipcode").next(".invalid-feedback").remove();
-                }
-
-                // Submit form only if valid
-                if (isValid) {
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: '@Url.Action("ProfileDetails", "Dashboard")',
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            if(response.success)
-                            {
-                                toastr.success(response.message);
-                                setTimeout(function () {
-                                    location.reload(); // Refresh user list
-                                }, 2000);
-                            }
-                            else{
-                                toastr.error(response.message);
-                                setTimeout(function () {
-                                    location.reload(); // Refresh user list
-                                }, 3000);
-                            }
-                        },
-                        error: function () {
-                            toastr.error("Error updating profile");
-                        }
-                    });
-                }
-            });
-
-    // Remove error styling when user types
-    $("#profileForm input, #profileForm select").on("input change", function () {
-        $(this).removeClass("is-invalid");
-        $(this).next(".invalid-feedback").remove();
-    });
         });
     </script>
 }
