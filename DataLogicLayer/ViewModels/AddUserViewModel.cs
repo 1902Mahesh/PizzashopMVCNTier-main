@@ -29,6 +29,8 @@ public class AddUserViewModel
         [RegularExpression("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
             ErrorMessage = "Password must be at least 8 characters long, contain at least one letter, one number, and one special character.")]
     public string? Password { get; set; }
+
+    // [AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
     public IFormFile? ProfileImage { get; set; } // For Uploading Image
 
     // New properties for country, state, and city selection

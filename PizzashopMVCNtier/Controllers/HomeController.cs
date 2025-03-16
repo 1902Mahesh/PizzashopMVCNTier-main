@@ -51,8 +51,8 @@ public class HomeController : Controller
         bool token = await _loginService.LoginUser(model.Email, model.Password, model.RememberMe);
         if (token)
         {
-            TempData["NotificationMessage"] = NotificationMessages.LoginSuccess;
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            // TempData["NotificationMessage"] = NotificationMessages.LoginSuccess;
+            // TempData["NotificationType"] = NotificationType.Success.ToString();
             return RedirectToAction("Index", "Dashboard");
         }
         //If Login Service return false

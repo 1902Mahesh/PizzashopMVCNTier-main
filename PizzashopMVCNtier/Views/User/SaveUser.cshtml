@@ -60,12 +60,27 @@
                     <label for="role">Role</label>
                     <span class="text-danger" asp-validation-for="RoleId"></span>
                 </div>
-                <div class="form-floating col-md-6 mb-3">
-                    <input asp-for="@Model.Email" type="email" class="form-control" id="email"
-                        placeholder="john123@gmail.com" />
+                @if(Model.UserId == null)
+                {
+                    <div class="form-floating col-md-6 mb-3">
+                        <input asp-for="@Model.Email" type="email" class="form-control" id="email" 
+                            placeholder="john123@gmail.com"/>
+                        <label for="email">Email</label>
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-floating col-md-6 mb-3">
+                    <input type="email" class="form-control" id="email" 
+                        placeholder="john123@gmail.com" disabled value="@Model.Email"/>
                     <label for="email">Email</label>
                     <span class="text-danger" asp-validation-for="Email"></span>
+                    
+                    <!-- Hidden input to retain the email value when submitting the form -->
+                    <input type="hidden" asp-for="Email" />
                 </div>
+                }
                 @if(Model.UserId == null)
                 {
                     <div class="form-floating col-md-6 mb-3 position-relative">
@@ -201,7 +216,20 @@
                     $(".field-validation-error, .text-danger, .validation-summary-errors").show();
                 }
             });
-        });
+
+        @* $("#ProfileImage").change(function () {
+            var file = this.files[0];
+            if (file) {
+                var fileType = file.name.split('.').pop().toLowerCase();
+                var allowedTypes = ["jpg", "jpeg", "png", "gif"];
+                
+                if ($.inArray(fileType, allowedTypes) === -1) {
+                    toastr.error("Only JPG, JPEG, PNG files are allowed.");
+                    $(this).val(""); // Clear the input
+                }
+            }
+        }); *@
+    });
 
 
     </script>
